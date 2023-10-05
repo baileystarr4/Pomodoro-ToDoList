@@ -40,6 +40,8 @@ def start_timer():
     work_sec = work_min * 60
     snooze_sec = snooze_min * 60
 
+    question_label.grid_remove()
+    button.config(text="reset", command=clicked_reset_button)
     entry.grid_remove()
     canvas.grid(column=1, row=1)
     
@@ -67,6 +69,24 @@ def count_down(count):
         start_timer()
 
 # ----------------------------------------------------------- #
+def clicked_custom_button():
+    custom_button.grid_remove()
+    default_button.grid_remove()
+    question_label.config(text="How long would you like to work? \n Enter in minutes")
+    question_label.grid(column=1, row=1)
+    entry.grid(column=1, row=2)
+    button.grid(column=1, row=3)
+
+def clicked_default_button():
+    custom_button.grid_remove()
+    default_button.grid_remove()
+    global work_min
+    global snooze_min
+
+    work_min = 60
+    snooze_min = 10
+    button.grid(column=1, row=3)
+    start_timer()
 def save_time_work():
     input = int(entry.get())
     global work_min
@@ -79,9 +99,6 @@ def save_time_snooze():
     input = int(entry.get())
     global snooze_min
     snooze_min = input
-
-    question_label.grid_remove()
-    button.config(text="result", command=clicked_reset_button)
     start_timer()
 
     
@@ -90,24 +107,16 @@ window = Tk()
 window.title("Timer")
 window.config(padx=150, pady=100, bg=DEFAULT_BG)
 
-timer_label = Label(text="Timer", font=(FONT_NAME, 50, "bold"), fg=DEFAULT_TEXT, bg=DEFAULT_BG)
+timer_label = Label(text="Stretching Timer", font=(FONT_NAME, 50, "bold"), fg=DEFAULT_TEXT, bg=DEFAULT_BG)
 timer_label.grid(column=1, row=0)
-question_label = Label(text="How long would you like to work? \n Enter in minutes", font=(FONT_NAME, 18), fg=DEFAULT_TEXT, bg=DEFAULT_BG)
-question_label.grid(column=1, row=1)
+default_button = Button(text="Default", command=clicked_default_button)
+default_button.grid(column=0, row=1)
+custom_button = Button(text="Custom", command=clicked_custom_button)
+custom_button.grid(column=1, row=1)
+
+question_label = Label(font=(FONT_NAME, 18), fg=DEFAULT_TEXT, bg=DEFAULT_BG)
 entry = Entry(window, width=10)
-entry.grid(column=1, row=2)
 button = Button(text="save", command=save_time_work)
-button.grid(column=1, row=3)
-
-
-
-
-# start_button = Button(text="Start", command=start_timer)
-# start_button.grid(column=0, row=2)
-
-# reset_button = Button(text="Reset", command=clicked_reset_button)
-# reset_button.grid(column=2, row=2)
-
 canvas = Canvas(width=200, height=224, bg=DEFAULT_BG, highlightthickness=0)
 timer_text = canvas.create_text(100, 130, text="00:00", fill = "white", font=(FONT_NAME, 35, "bold"))
 
