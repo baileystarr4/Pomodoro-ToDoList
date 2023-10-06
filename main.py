@@ -1,17 +1,22 @@
 from tkinter import *
 import math
 #TO DO 
-# 1) Make reps, work minutes, snooze time customizable. 
-# 2) Add use default button
-# 3) Fix UI
-# 4) Make into a Windows App
-# 5) Windows Pop Ups?
+# 2) Add stretch customization
+# 2) Fix stretch / snooze timer
+# 2) add stretch button to snooze
+# 2) add enter key function
+# 2) default / custom reset
+# 2) add sound
+# 2) Fix UI
+# 3) Make into a Windows App
+# 4) Windows Pop Ups?
 
 # ---------------------------- CONSTANTS ------------------------------- #
 DEFAULT_BG = "#272829"
 DEFAULT_BUTTON = "#61677A"
 DEFAULT_TEXT = "#D8D9DA"
 FONT_NAME = "Courier"
+STRETCH_MIN = 2
 work_min = 0
 snooze_min = 0
 reps = 0
@@ -21,12 +26,11 @@ timer = None
 def clicked_reset_button():
     window.after_cancel(timer)
     canvas.grid_remove()
-    timer_label.config(text="Timer")
-    question_label.config(text="How long would you like to work? \n Enter in minutes")
-    question_label.grid()
-    entry.grid()
-    button.config(text="save", command=save_time_work)
-    
+    button.grid_remove()
+    timer_label.config(text="Stretching Timer")
+    default_button.grid()
+    custom_button.grid()
+
     global reps
     reps = 0
 
@@ -38,7 +42,7 @@ def start_timer():
     reps += 1
 
     work_sec = work_min * 60
-    snooze_sec = snooze_min * 60
+    stretch_sec = STRETCH_MIN * 60
 
     question_label.grid_remove()
     button.config(text="reset", command=clicked_reset_button)
@@ -46,11 +50,12 @@ def start_timer():
     canvas.grid(column=1, row=1)
     
     if reps % 2 == 0:
-        count_down(snooze_sec)
-        timer_label.config(text="Break", fg=DEFAULT_TEXT)
+        timer_label.config(text="STRETCH")
+        button.config(text="SNOOZE", command=clicked_snooze)
+        count_down(stretch_sec)
     else:
         count_down(work_sec)
-        timer_label.config(text="Work", fg=DEFAULT_TEXT)
+        timer_label.config(text="Work")
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
 def count_down(count):
@@ -75,6 +80,7 @@ def clicked_custom_button():
     question_label.config(text="How long would you like to work? \n Enter in minutes")
     question_label.grid(column=1, row=1)
     entry.grid(column=1, row=2)
+    button.config(text="save", command=save_time_work)
     button.grid(column=1, row=3)
 
 def clicked_default_button():
@@ -87,6 +93,7 @@ def clicked_default_button():
     snooze_min = 10
     button.grid(column=1, row=3)
     start_timer()
+
 def save_time_work():
     input = int(entry.get())
     global work_min
@@ -101,7 +108,20 @@ def save_time_snooze():
     snooze_min = input
     start_timer()
 
+def clicked_snooze():
+    window.after_cancel(timer)
+    global reps
+    reps -= 1
+    snooze_sec = snooze_min * 60
+    timer_label.config(text="SNOOZE")
+    button.config(text="Stretch", command=clicked_stretch)
+    count_down(snooze_sec)
+
+def clicked_stretch():
+    window.after_cancel(timer)
+    start_timer()
     
+
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
 window.title("Timer")
