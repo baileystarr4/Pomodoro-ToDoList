@@ -1,11 +1,13 @@
 from tkinter import *
 import math
+import pygame
 #TO DO 
 #  fix code layout
-#  add sound
 #  Fix UI
 #  Make into a Windows App
 #  Windows Pop Ups?
+#  Get sound to stop
+#  get rid of stretch config and timer
 
 # ---------------------------- CONSTANTS ------------------------------- #
 DEFAULT_BG = "#272829"
@@ -18,6 +20,11 @@ snooze_min = 1
 reps = 0
 timer = None
 
+pygame.mixer.init()# initialise the pygame
+ 
+def play():
+    pygame.mixer.music.load("219244__zyrytsounds__alarm-clock-short.wav")
+    pygame.mixer.music.play(loops=1)
 # ---------------------------- TIMER RESET ------------------------------- # 
 def clicked_reset_button():
     window.after_cancel(timer)
@@ -48,6 +55,7 @@ def start_timer():
     
     if reps % 2 == 0:
         timer_label.config(text="STRETCH")
+        play()
         work_button.grid(column=2, row=2)
         button.config(text="SNOOZE", command=clicked_snooze)
         count_down(stretch_sec)
