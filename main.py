@@ -1,8 +1,6 @@
 from tkinter import *
 import math
 #TO DO 
-#  Add stretch customization
-#  add work button to stretch
 #  fix buttons
 #  add enter key function
 #  add sound
@@ -82,6 +80,7 @@ def clicked_custom_button():
     question_label.grid(column=1, row=1)
     entry.grid(column=1, row=2)
     button.config(text="save", command=save_time_work)
+    entry.bind('<Return>', (lambda event: save_time_work()))
     button.grid(column=1, row=3)
 
 def clicked_default_button():
@@ -95,6 +94,7 @@ def save_time_work():
     work_min = input
 
     button.config(command=save_time_stretch)
+    entry.bind('<Return>', (lambda event: save_time_stretch()))
     question_label.config(text="How long would you like to stretch?\n Enter in minutes")
 
 def save_time_stretch():
@@ -103,6 +103,7 @@ def save_time_stretch():
     stretch_min = input
 
     button.config(command=save_time_snooze)
+    entry.bind('<Return>', (lambda event: save_time_snooze()))
     question_label.config(text="How long would you like to snooze?\n Enter in minutes")
 
 def save_time_snooze():
