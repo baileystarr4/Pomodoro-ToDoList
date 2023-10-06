@@ -2,10 +2,8 @@ from tkinter import *
 import math
 #TO DO 
 # 2) Add stretch customization
-# 2) Fix stretch / snooze timer
-# 2) add stretch button to snooze
+# 2) add work button to stretch
 # 2) add enter key function
-# 2) default / custom reset
 # 2) add sound
 # 2) Fix UI
 # 3) Make into a Windows App
@@ -16,9 +14,9 @@ DEFAULT_BG = "#272829"
 DEFAULT_BUTTON = "#61677A"
 DEFAULT_TEXT = "#D8D9DA"
 FONT_NAME = "Courier"
-STRETCH_MIN = 2
-work_min = 0
-snooze_min = 0
+stretch_min = 2
+work_min = 60
+snooze_min = 10
 reps = 0
 timer = None
 
@@ -42,12 +40,13 @@ def start_timer():
     reps += 1
 
     work_sec = work_min * 60
-    stretch_sec = STRETCH_MIN * 60
+    stretch_sec = stretch_min * 60
 
     question_label.grid_remove()
     button.config(text="reset", command=clicked_reset_button)
     entry.grid_remove()
     canvas.grid(column=1, row=1)
+    button.grid(column=1, row=3)
     
     if reps % 2 == 0:
         timer_label.config(text="STRETCH")
@@ -86,18 +85,20 @@ def clicked_custom_button():
 def clicked_default_button():
     custom_button.grid_remove()
     default_button.grid_remove()
-    global work_min
-    global snooze_min
-
-    work_min = 60
-    snooze_min = 10
-    button.grid(column=1, row=3)
     start_timer()
 
 def save_time_work():
     input = int(entry.get())
     global work_min
     work_min = input
+
+    button.config(command=save_time_stretch)
+    question_label.config(text="How long would you like to stretch?\n Enter in minutes")
+
+def save_time_stretch():
+    input = int(entry.get())
+    global stretch_min
+    stretch_min = input
 
     button.config(command=save_time_snooze)
     question_label.config(text="How long would you like to snooze?\n Enter in minutes")
