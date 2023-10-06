@@ -1,8 +1,7 @@
 from tkinter import *
 import math
 #TO DO 
-#  fix buttons
-#  add enter key function
+#  fix code layout
 #  add sound
 #  Fix UI
 #  Make into a Windows App
