@@ -1,22 +1,23 @@
 from tkinter import *
 import math
 #TO DO 
-# 2) Add stretch customization
-# 2) add work button to stretch
-# 2) add enter key function
-# 2) add sound
-# 2) Fix UI
-# 3) Make into a Windows App
-# 4) Windows Pop Ups?
+#  Add stretch customization
+#  add work button to stretch
+#  fix buttons
+#  add enter key function
+#  add sound
+#  Fix UI
+#  Make into a Windows App
+#  Windows Pop Ups?
 
 # ---------------------------- CONSTANTS ------------------------------- #
 DEFAULT_BG = "#272829"
 DEFAULT_BUTTON = "#61677A"
 DEFAULT_TEXT = "#D8D9DA"
 FONT_NAME = "Courier"
-stretch_min = 2
-work_min = 60
-snooze_min = 10
+stretch_min = 1
+work_min = 1
+snooze_min = 1
 reps = 0
 timer = None
 
@@ -50,6 +51,7 @@ def start_timer():
     
     if reps % 2 == 0:
         timer_label.config(text="STRETCH")
+        work_button.grid(column=2, row=2)
         button.config(text="SNOOZE", command=clicked_snooze)
         count_down(stretch_sec)
     else:
@@ -111,16 +113,19 @@ def save_time_snooze():
 
 def clicked_snooze():
     window.after_cancel(timer)
+    work_button.grid_remove()
     global reps
     reps -= 1
     snooze_sec = snooze_min * 60
     timer_label.config(text="SNOOZE")
-    button.config(text="Stretch", command=clicked_stretch)
+    button.config(text="Stretch", command=clicked_stretch_or_work)
     count_down(snooze_sec)
 
-def clicked_stretch():
+def clicked_stretch_or_work():
+    work_button.grid_remove()
     window.after_cancel(timer)
     start_timer()
+
     
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -140,5 +145,6 @@ entry = Entry(window, width=10)
 button = Button(text="save", command=save_time_work)
 canvas = Canvas(width=200, height=224, bg=DEFAULT_BG, highlightthickness=0)
 timer_text = canvas.create_text(100, 130, text="00:00", fill = "white", font=(FONT_NAME, 35, "bold"))
+work_button = Button(text="WORK", command=clicked_stretch_or_work)
 
 window.mainloop()
