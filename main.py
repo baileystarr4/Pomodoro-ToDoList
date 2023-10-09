@@ -14,13 +14,12 @@ DEFAULT_BG = "#272829"
 DEFAULT_BUTTON = "#61677A"
 DEFAULT_TEXT = "#D8D9DA"
 FONT_NAME = "Courier"
-stretch_min = 1
 work_min = 1
 snooze_min = 1
 reps = 0
 timer = None
 
-pygame.mixer.init()# initialise the pygame
+pygame.mixer.init()
  
 def play():
     pygame.mixer.music.load("219244__zyrytsounds__alarm-clock-short.wav")
@@ -40,13 +39,9 @@ def clicked_reset_button():
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
 def start_timer():
     global reps
-    global work_min
-    global snooze_min
     reps += 1
 
-    work_sec = work_min * 60
-    stretch_sec = stretch_min * 60
-
+    entry.unbind('<Return>')
     question_label.grid_remove()
     button.config(text="reset", command=clicked_reset_button)
     entry.grid_remove()
@@ -55,11 +50,13 @@ def start_timer():
     
     if reps % 2 == 0:
         timer_label.config(text="STRETCH")
+        canvas.grid_remove()
         play()
+        work_button.config(command=clicked_work)
         work_button.grid(column=2, row=2)
         button.config(text="SNOOZE", command=clicked_snooze)
-        count_down(stretch_sec)
     else:
+        work_sec = work_min * 60
         count_down(work_sec)
         timer_label.config(text="Work")
 
@@ -71,7 +68,7 @@ def count_down(count):
         count_min=f"0{count_min}"
     if count_sec < 10:
         count_sec=f"0{count_sec}"
-
+    canvas.grid()
     canvas.itemconfig(timer_text, text=f"{count_min}:{count_sec}")
     if count > 0:
         global timer
@@ -100,15 +97,6 @@ def save_time_work():
     global work_min
     work_min = input
 
-    button.config(command=save_time_stretch)
-    entry.bind('<Return>', (lambda event: save_time_stretch()))
-    question_label.config(text="How long would you like to stretch?\n Enter in minutes")
-
-def save_time_stretch():
-    input = int(entry.get())
-    global stretch_min
-    stretch_min = input
-
     button.config(command=save_time_snooze)
     entry.bind('<Return>', (lambda event: save_time_snooze()))
     question_label.config(text="How long would you like to snooze?\n Enter in minutes")
@@ -120,16 +108,20 @@ def save_time_snooze():
     start_timer()
 
 def clicked_snooze():
-    window.after_cancel(timer)
-    work_button.grid_remove()
+    pygame.mixer.music.stop()
+    button.grid_remove()
+    work_button.config(command=work_from_snooze)
     global reps
     reps -= 1
     snooze_sec = snooze_min * 60
-    timer_label.config(text="SNOOZE")
-    button.config(text="Stretch", command=clicked_stretch_or_work)
     count_down(snooze_sec)
 
-def clicked_stretch_or_work():
+def work_from_snooze():
+    global reps
+    reps += 1
+    clicked_work()
+
+def clicked_work():
     work_button.grid_remove()
     window.after_cancel(timer)
     start_timer()
@@ -153,6 +145,6 @@ entry = Entry(window, width=10)
 button = Button(text="save", command=save_time_work)
 canvas = Canvas(width=200, height=224, bg=DEFAULT_BG, highlightthickness=0)
 timer_text = canvas.create_text(100, 130, text="00:00", fill = "white", font=(FONT_NAME, 35, "bold"))
-work_button = Button(text="WORK", command=clicked_stretch_or_work)
+work_button = Button(text="WORK", command=clicked_work)
 
 window.mainloop()
