@@ -1,42 +1,23 @@
-from tkinter import *
-import math
-import pygame
 #TO DO 
 #  fix code layout
 #  Fix UI
 #  Make into a Windows App
 #  Windows Pop Ups?
-#  Get sound to stop
-#  get rid of stretch config and timer
+from tkinter import *
+import math
+import pygame
 
-# ---------------------------- CONSTANTS ------------------------------- #
+# ---------------------------- GLOBALS AND CONSTANTS ------------------------------- # 
 DEFAULT_BG = "#272829"
 DEFAULT_BUTTON = "#61677A"
 DEFAULT_TEXT = "#D8D9DA"
 FONT_NAME = "Courier"
-work_min = 1
-snooze_min = 1
+work_min = 60
+snooze_min = 10
 reps = 0
 timer = None
 
-pygame.mixer.init()
- 
-def play():
-    pygame.mixer.music.load("219244__zyrytsounds__alarm-clock-short.wav")
-    pygame.mixer.music.play(loops=1)
-# ---------------------------- TIMER RESET ------------------------------- # 
-def clicked_reset_button():
-    window.after_cancel(timer)
-    canvas.grid_remove()
-    button.grid_remove()
-    timer_label.config(text="Stretching Timer")
-    default_button.grid()
-    custom_button.grid()
-
-    global reps
-    reps = 0
-
-# ---------------------------- TIMER MECHANISM ------------------------------- # 
+# ---------------------------- TIMER ------------------------------- # 
 def start_timer():
     global reps
     reps += 1
@@ -58,9 +39,7 @@ def start_timer():
     else:
         work_sec = work_min * 60
         count_down(work_sec)
-        timer_label.config(text="Work")
-
-# ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
+        timer_label.config(text="Work")     
 def count_down(count):
     count_min = math.floor(count / 60)
     count_sec = count % 60
@@ -76,7 +55,18 @@ def count_down(count):
     else:
         start_timer()
 
-# ----------------------------------------------------------- #
+# ---------------------------- BUTTON COMMANDS ------------------------------- # 
+def clicked_reset_button():
+    window.after_cancel(timer)
+    canvas.grid_remove()
+    button.grid_remove()
+    timer_label.config(text="Stretching Timer")
+    default_button.grid()
+    custom_button.grid()
+
+    global reps
+    reps = 0
+
 def clicked_custom_button():
     custom_button.grid_remove()
     default_button.grid_remove()
@@ -90,21 +80,6 @@ def clicked_custom_button():
 def clicked_default_button():
     custom_button.grid_remove()
     default_button.grid_remove()
-    start_timer()
-
-def save_time_work():
-    input = int(entry.get())
-    global work_min
-    work_min = input
-
-    button.config(command=save_time_snooze)
-    entry.bind('<Return>', (lambda event: save_time_snooze()))
-    question_label.config(text="How long would you like to snooze?\n Enter in minutes")
-
-def save_time_snooze():
-    input = int(entry.get())
-    global snooze_min
-    snooze_min = input
     start_timer()
 
 def clicked_snooze():
@@ -122,13 +97,32 @@ def work_from_snooze():
     clicked_work()
 
 def clicked_work():
+    pygame.mixer.music.stop()
     work_button.grid_remove()
     window.after_cancel(timer)
     start_timer()
+# ---------------------------- SAVE USER INPUT ------------------------------- # 
+def save_time_work():
+    input = int(entry.get())
+    global work_min
+    work_min = input
 
-    
+    button.config(command=save_time_snooze)
+    entry.bind('<Return>', (lambda event: save_time_snooze()))
+    question_label.config(text="How long would you like to snooze?\n Enter in minutes")
 
-# ---------------------------- UI SETUP ------------------------------- #
+def save_time_snooze():
+    input = int(entry.get())
+    global snooze_min
+    snooze_min = input
+    start_timer()
+
+# ---------------------------- PLAY ALARM ------------------------------- # 
+def play():
+    pygame.mixer.music.load("219244__zyrytsounds__alarm-clock-short.wav")
+    pygame.mixer.music.play(loops=1)
+
+# ---------------------------- UI ------------------------------- # 
 window = Tk()
 window.title("Timer")
 window.config(padx=150, pady=100, bg=DEFAULT_BG)
@@ -146,5 +140,6 @@ button = Button(text="save", command=save_time_work)
 canvas = Canvas(width=200, height=224, bg=DEFAULT_BG, highlightthickness=0)
 timer_text = canvas.create_text(100, 130, text="00:00", fill = "white", font=(FONT_NAME, 35, "bold"))
 work_button = Button(text="WORK", command=clicked_work)
+pygame.mixer.init()
 
 window.mainloop()
