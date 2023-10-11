@@ -3,6 +3,7 @@
 #  Make into a Windows App
 
 from tkinter import *
+from tkinter import messagebox
 import math
 import pygame
 
@@ -146,25 +147,38 @@ def clicked_work():
     start_timer()
 # ---------------------------- SAVE USER INPUT ------------------------------- # 
 def save_time_work():
-    # Retrive and save the desired work time
-    input = int(entry.get())
-    global work_min
-    work_min = input
+    try:
+        # Retrive the desired work time
+        input = int(entry.get())
 
-    # Ask user for input and reconfigure to save the snooze time
-    button.config(command=save_time_snooze)
-    entry.bind('<Return>', (lambda event: save_time_snooze()))
-    question_label.config(text="How long would you like to snooze?\n Enter in minutes")
-    entry.delete(0, END)
-    entry.insert(0, "5")
+    # If the user did not enter an integer, display an error pop up    
+    except ValueError:
+        messagebox.showinfo(title="Error", message="Invalid input time. Try Again.")    
+    else: 
+        # Save the desired work time   
+        global work_min
+        work_min = input
+
+        # Ask user for input and reconfigure to save the snooze time
+        button.config(command=save_time_snooze)
+        entry.bind('<Return>', (lambda event: save_time_snooze()))
+        question_label.config(text="How long would you like to snooze?\n Enter in minutes")
+        entry.delete(0, END)
+        entry.insert(0, "5")
 
 def save_time_snooze():
-    # Retrive and save the desired snooze time
-    input = int(entry.get())
-    global snooze_min
-    snooze_min = input
+    try:
+        # Retrive the desired snooze time
+        input = int(entry.get())
 
-    start_timer()
+    # If the user did not enter an integer, display an error pop up    
+    except ValueError:
+        messagebox.showinfo(title="Error", message="Invalid input time. Try Again.")    
+    else:            
+        global snooze_min
+        snooze_min = input
+
+        start_timer()
 
 # ---------------------------- PLAY ALARM ------------------------------- # 
 def play():
@@ -181,18 +195,22 @@ window.geometry('600x500')
 #Initialize and place on screen widgets
 timer_label = Label(text="Stretch Timer", font=(FONT_NAME, 50, "bold"), fg=LIGHT_COLOR, bg=DARK_COLOR)
 timer_label.place(relx=0.5,rely=0.25, anchor='center')
-default_button = Button(text="Default", command=clicked_default_button, bg=LIGHT_COLOR, fg=DARK_COLOR, font=(FONT_NAME, 15,"bold"), height=1, width=8)
+default_button = Button(text="Default", command=clicked_default_button, bg=LIGHT_COLOR, fg=DARK_COLOR,
+                         font=(FONT_NAME, 15,"bold"), height=1, width=8)
 default_button.place(relx=0.3,rely=0.6, anchor='center')
-custom_button = Button(text="Custom", command=clicked_custom_button, bg=LIGHT_COLOR, fg=DARK_COLOR, font=(FONT_NAME, 15, "bold"), height=1, width=8)
+custom_button = Button(text="Custom", command=clicked_custom_button, bg=LIGHT_COLOR, fg=DARK_COLOR, 
+                       font=(FONT_NAME, 15, "bold"), height=1, width=8)
 custom_button.place(relx=0.7,rely=0.6, anchor='center')
 
 #Initialize global widgets for later use
 question_label = Label(font=(FONT_NAME, 18, "bold"), fg=LIGHT_COLOR, bg=DARK_COLOR)
 entry = Entry(window, width=10, font=(FONT_NAME, 15,"bold"), justify= CENTER)
-button = Button(text="Save", command=save_time_work, bg=LIGHT_COLOR, fg=DARK_COLOR, font=(FONT_NAME, 15, "bold"), height=1, width=8)
+button = Button(text="Save", command=save_time_work, bg=LIGHT_COLOR, fg=DARK_COLOR, 
+                font=(FONT_NAME, 15, "bold"), height=1, width=8)
 canvas = Canvas(width=200, height=100, bg=DARK_COLOR, highlightthickness=0)
 timer_text = canvas.create_text(100, 50, text="00:00", fill = LIGHT_COLOR, font=(FONT_NAME, 40, "bold"))
-work_button = Button(text="Work", command=clicked_work, bg=LIGHT_COLOR, fg=DARK_COLOR, font=(FONT_NAME, 15, "bold"), height=1, width=8)
+work_button = Button(text="Work", command=clicked_work, bg=LIGHT_COLOR, fg=DARK_COLOR, 
+                     font=(FONT_NAME, 15, "bold"), height=1, width=8)
 pygame.mixer.init()
 
 window.mainloop()
