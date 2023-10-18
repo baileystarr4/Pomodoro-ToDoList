@@ -6,6 +6,7 @@ from tkinter import *
 from tkinter import messagebox
 import math
 import pygame
+from winotify import Notification
 
 # ---------------------------- GLOBALS AND CONSTANTS ------------------------------- # 
 DARK_COLOR = "#272829"
@@ -26,7 +27,7 @@ def start_timer():
     question_label.place_forget()
     entry.place_forget()
     
-    # Is it time to stretch
+    # Is it time to stretch?
     if reps % 2 == 0:
         timer_label.config(text="STRETCH")
         canvas.place_forget()
@@ -35,6 +36,7 @@ def start_timer():
         work_button.place(relx=0.3, rely=0.6, anchor='center')
         button.config(text="Snooze", command=clicked_snooze)
         button.place(relx=0.7, rely=0.6, anchor='center')
+        toast.show()
 
     # If not, it's time to work
     else:
@@ -213,4 +215,8 @@ work_button = Button(text="Work", command=clicked_work, bg=LIGHT_COLOR, fg=DARK_
                      font=(FONT_NAME, 15, "bold"), height=1, width=8)
 pygame.mixer.init()
 
+#Initializing windows notification 
+# Icon by Leremy https://www.freepik.com/icon/healthy_10049659#fromView=search&term=stretching&page=1&position=4&track=ais
+toast = Notification(app_id="Stretch Timer", title="Get up and stretch!",
+                     duration = "short", icon="C:/Users/Bailey/Documents/GitHub/Timer-App/healthy_10049659.png")
 window.mainloop()
