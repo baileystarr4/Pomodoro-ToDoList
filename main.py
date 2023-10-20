@@ -184,7 +184,7 @@ def save_time_snooze():
 
 # ---------------------------- PLAY ALARM ------------------------------- # 
 def play():
-    pygame.mixer.music.load("219244__zyrytsounds__alarm-clock-short.wav")
+    pygame.mixer.music.load("alarm.wav")
     pygame.mixer.music.play(loops=1)
 
 # ---------------------------- UI ------------------------------- # 
@@ -218,5 +218,5 @@ pygame.mixer.init()
 #Initializing windows notification 
 # Icon by Leremy https://www.freepik.com/icon/healthy_10049659#fromView=search&term=stretching&page=1&position=4&track=ais
 toast = Notification(app_id="Stretch Timer", title="Get up and stretch!",
-                     duration = "short", icon="C:/Users/Bailey/Documents/GitHub/Timer-App/healthy_10049659.png")
+                     duration = "short", icon="C:/Users/Bailey/Documents/GitHub/Timer-App/notification_icon.png")
 window.mainloop()
