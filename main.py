@@ -1,7 +1,3 @@
-#TO DO 
-#  Windows Pop Ups
-#  Make into a Windows App
-
 from tkinter import *
 from tkinter import messagebox
 import math
@@ -104,8 +100,8 @@ def clicked_reset_button():
 
     # Reset screen to the starting screen
     timer_label.config(text="Stretch Timer")
-    default_button.place(relx=0.4,rely=0.6, anchor='center')
-    custom_button.place(relx=0.6,rely=0.6, anchor='center')
+    default_button.place(relx=0.3,rely=0.6, anchor='center')
+    custom_button.place(relx=0.7,rely=0.6, anchor='center')
 
     # Reset timer
     global reps
