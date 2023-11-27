@@ -1,8 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import math
-import pygame
-from winotify import Notification
+from Notifier import *
 
 # ---------------------------- GLOBALS AND CONSTANTS ------------------------------- # 
 DARK_COLOR = "#272829"
@@ -27,12 +26,12 @@ def start_timer():
     if reps % 2 == 0:
         timer_label.config(text="STRETCH")
         canvas.place_forget()
-        play()
+        notifier.play_alarm()
         work_button.config(command=clicked_work)
         work_button.place(relx=0.3, rely=0.6, anchor='center')
         button.config(text="Snooze", command=clicked_snooze)
         button.place(relx=0.7, rely=0.6, anchor='center')
-        toast.show()
+        notifier.toast.show()
 
     # If not, it's time to work
     else:
@@ -109,7 +108,7 @@ def clicked_reset_button():
 
 def clicked_snooze():
     # Stop the alarm
-    pygame.mixer.music.stop()
+    notifier.alarm.music.stop()
 
     # Remove unnecessary widget from the screen
     button.place_forget()
@@ -134,7 +133,7 @@ def clicked_work_from_snooze():
 
 def clicked_work():
     # Stop the alarm
-    pygame.mixer.music.stop()
+    notifier.alarm.music.stop()
 
     # Remove unnecessary widget
     work_button.place_forget()
@@ -178,13 +177,6 @@ def save_time_snooze():
 
         start_timer()
 
-# ---------------------------- PLAY ALARM ------------------------------- # 
-def play():
-    # Notification sound by Joao_Janz on freesound.org
-    # https://freesound.org/people/Joao_Janz/sounds/504821/
-    pygame.mixer.music.load("notification_sound.wav")
-    pygame.mixer.music.play(loops=3)
-
 # ---------------------------- UI ------------------------------- # 
 #Initialize and configure window
 window = Tk()
@@ -211,10 +203,6 @@ canvas = Canvas(width=200, height=100, bg=DARK_COLOR, highlightthickness=0)
 timer_text = canvas.create_text(100, 50, text="00:00", fill = LIGHT_COLOR, font=(FONT_NAME, 40, "bold"))
 work_button = Button(text="Work", command=clicked_work, bg=LIGHT_COLOR, fg=DARK_COLOR, 
                      font=(FONT_NAME, 15, "bold"), height=1, width=8)
-pygame.mixer.init()
+notifier = Notifier()
 
-#Initializing windows notification 
-# Icon by Leremy https://www.freepik.com/icon/healthy_10049659#fromView=search&term=stretching&page=1&position=4&track=ais
-toast = Notification(app_id="Stretch Timer", title="Get up and stretch!",
-                     duration = "short", icon=r"C:\Users\Bailey\Documents\GitHub\Timer-App\notificaiton_icon.png")
 window.mainloop()
