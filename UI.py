@@ -90,29 +90,6 @@ class UI:
         # Reset timer
         self.reps = 0    
 
-    def clicked_snooze(self):
-        # Stop the alarm
-        self.notifier.stop_music()
-
-        # Remove unnecessary widget from the screen
-        self.button.place_forget()
-
-        # Add work button to the screen
-        self.work_button.config(command=self.clicked_work_from_snooze)
-        self.work_button.place(relx=0.5, rely=0.7, anchor='center')
-
-        # Decrease the reps so when the snooze timer finishes, the timer goes back to the stretch screen
-        self.reps -= 1
-
-        # Start snooze timer
-        snooze_sec = self.snooze_min * 60
-        self.count_down(snooze_sec)
-
-    def clicked_work_from_snooze(self):
-        # Increase the reps so the timer knows the user is ready to go back to work
-        self.reps += 1
-        self.clicked_work()
-
     def clicked_work(self):
         # Stop the alarm
         self.notifier.stop_music()
@@ -173,44 +150,53 @@ class UI:
         else:            
             self.long_break = input    
 
-            # Clear save button and start timer        
+            # Remove unnecessary widgets from the screen
+            self.entry.unbind('<Return>')
+            self.question_label.place_forget()
+            self.entry.place_forget()       
             self.save_button.place_forget()
+
             self.start_timer()
 
     # ---------------------------- UPDATING THE SCREEN ------------------------------- # 
     def config_for_work(self):
-        # Remove unnecessary widgets from the screen
-        self.entry.unbind('<Return>')
-        self.question_label.place_forget()
-        self.entry.place_forget()
-
         self.timer_label.config(text="Work")
         self.reset_button.place(relx=0.5,rely=0.7, anchor='center')
 
-    def config_for_stretch(self):
-        self.timer_label.config(text="STRETCH")
-        self.canvas.place_forget()
-        self.work_button.config(command=self.clicked_work)
-        self.work_button.place(relx=0.3, rely=0.6, anchor='center')
-        self.break_button.place(relx=0.7, rely=0.6, anchor='center')
+    def config_for_long_break(self):
+        self.timer_label.config(text="Long Break")
+        self.reset_button.place(relx=0.5,rely=0.7, anchor='center')
 
     # ---------------------------- TIMER ------------------------------- # 
     def start_timer(self):
         self.reps += 1
         
-        # Is it time to stretch?
+        # Is it time for a long break?
+        if self.reps % 6 == 0:
+            self.break_button.place(relx=0.5,rely=0.7, anchor='center')
+            self.notifier.long_break_toast.show()
+            self.notifier.play_alarm()
+
+        # Is it time for a short break?
         if self.reps % 2 == 0:
-            self.config_for_stretch()
-            self.notifier.break_toast.show()
+            self.break_button.place(relx=0.5,rely=0.7, anchor='center')
+            self.notifier.short_break_toast.show()
             self.notifier.play_alarm()
 
         # If not, it's time to work
         else:
-            self.config_for_work()
-            self.notifier.work_toast.show()
-            self.notifier.play_alarm()
-            work_sec = self.work_min * 60
-            self.count_down(work_sec)    
+            # If it's not our first work session, show the work button to start
+            if self.reps != 1: 
+                self.work_button.place(relx=0.5,rely=0.7, anchor='center')
+                self.notifier.work_toast.show()
+                self.notifier.play_alarm()
+
+            # If it is the first work session, start timer immediately 
+            else: 
+                self.config_for_work()
+                self.canvas.place(relx=0.5,rely=0.475, anchor='center')
+                work_sec = self.work_min * 60
+                self.count_down(work_sec)    
 
     def count_down(self,count):
         # Count down mechanism
@@ -222,7 +208,6 @@ class UI:
             count_sec=f"0{count_sec}"
 
         # Update timer on screen
-        self.canvas.place(relx=0.5,rely=0.475, anchor='center')
         self.canvas.itemconfig(self.timer_text, text=f"{count_min}:{count_sec}")
 
         # If the timer has not ended, continue counting down
