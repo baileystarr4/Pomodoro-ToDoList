@@ -12,17 +12,18 @@ class UI:
         self.timer = None
         self.notifier = Notifier()
         self.reps = 0
-        self.work_min = 60
-        self.snooze_min = 10
+        self.work_min = 45
+        self.short_break = 15
+        self.long_break = 30
 
         #Initialize and configure window
         self.window = Tk()
-        self.window.title("Stretch Timer")
+        self.window.title("Pomodoro")
         self.window.config(bg=self.DARK_COLOR)
         self.window.geometry('600x500')
 
         #Initialize and place on screen widgets
-        self.timer_label = Label(text="Stretch Timer", font=(self.FONT_NAME, 50, "bold"), fg=self.LIGHT_COLOR, bg=self.DARK_COLOR)
+        self.timer_label = Label(text="Pomodoro", font=(self.FONT_NAME, 50, "bold"), fg=self.LIGHT_COLOR, bg=self.DARK_COLOR)
         self.timer_label.place(relx=0.5,rely=0.25, anchor='center')
         self.default_button = Button(text="Default", command=self.clicked_default_button, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR,
                                 font=(self.FONT_NAME, 15,"bold"), height=1, width=8)
@@ -34,13 +35,16 @@ class UI:
         #Initialize widgets for later use
         self.question_label = Label(font=(self.FONT_NAME, 18, "bold"), fg=self.LIGHT_COLOR, bg=self.DARK_COLOR)
         self.entry = Entry(self.window, width=10, font=(self.FONT_NAME, 15,"bold"), justify= CENTER)
-        self.button = Button(text="Save", command=self.save_time_work, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR, 
-                        font=(self.FONT_NAME, 15, "bold"), height=1, width=8)
         self.canvas = Canvas(width=200, height=100, bg=self.DARK_COLOR, highlightthickness=0)
         self.timer_text = self.canvas.create_text(100, 50, text="00:00", fill = self.LIGHT_COLOR, font=(self.FONT_NAME, 40, "bold"))
+        self.save_button = Button(text="Save", command=self.save_time_work, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR, 
+                        font=(self.FONT_NAME, 15, "bold"), height=1, width=8)
+        self.reset_button = Button(text="Reset", command=self.clicked_reset_button, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR, 
+                        font=(self.FONT_NAME, 15, "bold"), height=1, width=8)
         self.work_button = Button(text="Work", command=self.clicked_work, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR, 
+                            font=(self.FONT_NAME, 15, "bold"), height=1, width=8) 
+        self.break_button = Button(text="Break", command=self.clicked_break, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR, 
                             font=(self.FONT_NAME, 15, "bold"), height=1, width=8)
-        
         self.window.mainloop()
 
     # ---------------------------- BUTTON COMMANDS ------------------------------- # 
@@ -59,9 +63,7 @@ class UI:
         self.entry.delete(0, END)
         self.entry.insert(0, "30")
         self.entry.bind('<Return>', (lambda event: self.save_time_work()))
-
-        self.button.config(command=self.save_time_work)
-        self.button.place(relx=0.5,rely=0.7, anchor='center')
+        self.save_button.place(relx=0.5,rely=0.7, anchor='center')
 
     def clicked_default_button(self):
         # Remove unnecessary widgets from the screen
@@ -78,7 +80,7 @@ class UI:
 
         # Remove unnecessary widgets from the screen
         self.canvas.place_forget()
-        self.button.place_forget()
+        self.reset_button.place_forget()
 
         # Reset screen to the starting screen
         self.timer_label.config(text="Stretch Timer")
@@ -100,20 +102,20 @@ class UI:
         self.work_button.place(relx=0.5, rely=0.7, anchor='center')
 
         # Decrease the reps so when the snooze timer finishes, the timer goes back to the stretch screen
-        self.timer.reps -= 1
+        self.reps -= 1
 
         # Start snooze timer
         snooze_sec = self.snooze_min * 60
-        self.timer.count_down(snooze_sec)
+        self.count_down(snooze_sec)
 
     def clicked_work_from_snooze(self):
         # Increase the reps so the timer knows the user is ready to go back to work
-        self.timer.reps += 1
+        self.reps += 1
         self.clicked_work()
 
     def clicked_work(self):
         # Stop the alarm
-        self.notifier.alarm.music.stop()
+        self.notifier.stop_music()
 
         # Remove unnecessary widget
         self.work_button.place_forget()
@@ -136,9 +138,9 @@ class UI:
             self.work_min = input
 
             # Ask user for input and reconfigure to save the snooze time
-            self.button.config(command=self.save_time_snooze)
+            self.save_button.config(command=self.save_time_snooze)
             self.entry.bind('<Return>', (lambda event: self.save_time_snooze()))
-            self.question_label.config(text="How long would you like to snooze?\n Enter in minutes")
+            self.question_label.config(text="How long would you like to break?\n Enter in minutes")
             self.entry.delete(0, END)
             self.entry.insert(0, "5")
 
@@ -151,8 +153,8 @@ class UI:
         except ValueError:
             messagebox.showinfo(title="Error", message="Invalid input time. Try Again.")    
         else:            
-            self.snooze_min = input
-
+            self.short_break = input
+            self.save_button.place_forget()
             self.start_timer()
 
     # ---------------------------- UPDATING THE SCREEN ------------------------------- # 
@@ -163,16 +165,14 @@ class UI:
         self.entry.place_forget()
 
         self.timer_label.config(text="Work")
-        self.button.config(text="Reset", command=self.clicked_reset_button)
-        self.button.place(relx=0.5,rely=0.7, anchor='center')
+        self.reset_button.place(relx=0.5,rely=0.7, anchor='center')
 
     def config_for_stretch(self):
         self.timer_label.config(text="STRETCH")
         self.canvas.place_forget()
         self.work_button.config(command=self.clicked_work)
         self.work_button.place(relx=0.3, rely=0.6, anchor='center')
-        self.button.config(text="Snooze", command=self.clicked_snooze)
-        self.button.place(relx=0.7, rely=0.6, anchor='center')
+        self.break_button.place(relx=0.7, rely=0.6, anchor='center')
 
     # ---------------------------- TIMER ------------------------------- # 
     def start_timer(self):
