@@ -137,16 +137,16 @@ class UI:
             # Save the desired work time   
             self.work_min = input
 
-            # Ask user for input and reconfigure to save the snooze time
-            self.save_button.config(command=self.save_time_snooze)
-            self.entry.bind('<Return>', (lambda event: self.save_time_snooze()))
-            self.question_label.config(text="How long would you like to break?\n Enter in minutes")
+            # Ask user for input and reconfigure to save the short break time
+            self.save_button.config(command=self.save_time_short_break)
+            self.entry.bind('<Return>', (lambda event: self.save_time_short_break()))
+            self.question_label.config(text="How long would you like the short break to be?\n Enter in minutes")
             self.entry.delete(0, END)
             self.entry.insert(0, "5")
 
-    def save_time_snooze(self):
+    def save_time_short_break(self):
         try:
-            # Retrive the desired snooze time
+            # Retrive the desired short break time
             input = int(self.entry.get())
 
         # If the user did not enter an integer, display an error pop up    
@@ -154,6 +154,26 @@ class UI:
             messagebox.showinfo(title="Error", message="Invalid input time. Try Again.")    
         else:            
             self.short_break = input
+
+            # Ask user for input and reconfigure to save the long break time
+            self.save_button.config(command=self.save_time_long_break)
+            self.entry.bind('<Return>', (lambda event: self.save_time_long_break()))
+            self.question_label.config(text="How long would you like the long break to be?\n Enter in minutes")
+            self.entry.delete(0, END)
+            self.entry.insert(0, "15")
+
+    def save_time_long_break(self):
+        try:
+            # Retrive the desired long break time
+            input = int(self.entry.get())
+
+        # If the user did not enter an integer, display an error pop up    
+        except ValueError:
+            messagebox.showinfo(title="Error", message="Invalid input time. Try Again.")    
+        else:            
+            self.long_break = input    
+
+            # Clear save button and start timer        
             self.save_button.place_forget()
             self.start_timer()
 
