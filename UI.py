@@ -13,8 +13,8 @@ class UI:
         self.notifier = Notifier()
         self.reps = 0
         self.work_min = 45
-        self.short_break = 15
-        self.long_break = 30
+        self.short_break_min = 15
+        self.long_break_min = 30
 
         #Initialize and configure window
         self.window = Tk()
@@ -43,7 +43,7 @@ class UI:
                         font=(self.FONT_NAME, 15, "bold"), height=1, width=8)
         self.work_button = Button(text="Work", command=self.clicked_work, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR, 
                             font=(self.FONT_NAME, 15, "bold"), height=1, width=8) 
-        self.break_button = Button(text="Break", command=self.clicked_break, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR, 
+        self.break_button = Button(text="Break", command=self.clicked_short_break, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR, 
                             font=(self.FONT_NAME, 15, "bold"), height=1, width=8)
         self.window.mainloop()
 
@@ -83,7 +83,7 @@ class UI:
         self.reset_button.place_forget()
 
         # Reset screen to the starting screen
-        self.timer_label.config(text="Stretch Timer")
+        self.timer_label.config(text="Pomodoro")
         self.default_button.place(relx=0.3,rely=0.6, anchor='center')
         self.custom_button.place(relx=0.7,rely=0.6, anchor='center')
 
@@ -91,16 +91,37 @@ class UI:
         self.reps = 0    
 
     def clicked_work(self):
-        # Stop the alarm
+        # Stop alarm, update screen, and start the count down
+        self.notifier.stop_music()
+        
+        self.work_button.place_forget()
+        self.timer_label.config(text="Work")
+        self.reset_button.place(relx=0.5,rely=0.7, anchor='center')
+
+        work_sec = self.work_min * 60
+        self.count_down(work_sec) 
+
+    def clicked_long_break(self):
+        # Stop alarm, update screen, and start the count down
         self.notifier.stop_music()
 
-        # Remove unnecessary widget
-        self.work_button.place_forget()
+        self.break_button.place_forget()
+        self.timer_label.config(text="Long Break")
+        self.reset_button.place(relx=0.5,rely=0.7, anchor='center')
 
-        # Stop snooze timer
-        self.window.after_cancel(self.timer)
+        break_sec = self.long_break_min * 60
+        self.count_down(break_sec)
 
-        self.start_timer()
+    def clicked_short_break(self):
+        # Stop alarm, update screen, and start the count down
+        self.notifier.stop_music()
+
+        self.break_button.place_forget()
+        self.timer_label.config(text="Short Break")
+        self.reset_button.place(relx=0.5,rely=0.7, anchor='center')
+
+        break_sec = self.short_break_min * 60
+        self.count_down(break_sec)
     # ---------------------------- SAVE USER INPUT ------------------------------- # 
     def save_time_work(self):
         try:
@@ -130,7 +151,7 @@ class UI:
         except ValueError:
             messagebox.showinfo(title="Error", message="Invalid input time. Try Again.")    
         else:            
-            self.short_break = input
+            self.short_break_min = input
 
             # Ask user for input and reconfigure to save the long break time
             self.save_button.config(command=self.save_time_long_break)
@@ -148,7 +169,7 @@ class UI:
         except ValueError:
             messagebox.showinfo(title="Error", message="Invalid input time. Try Again.")    
         else:            
-            self.long_break = input    
+            self.long_break_min = input    
 
             # Remove unnecessary widgets from the screen
             self.entry.unbind('<Return>')
@@ -158,27 +179,21 @@ class UI:
 
             self.start_timer()
 
-    # ---------------------------- UPDATING THE SCREEN ------------------------------- # 
-    def config_for_work(self):
-        self.timer_label.config(text="Work")
-        self.reset_button.place(relx=0.5,rely=0.7, anchor='center')
-
-    def config_for_long_break(self):
-        self.timer_label.config(text="Long Break")
-        self.reset_button.place(relx=0.5,rely=0.7, anchor='center')
-
     # ---------------------------- TIMER ------------------------------- # 
     def start_timer(self):
         self.reps += 1
-        
+        self.reset_button.place_forget()
+
         # Is it time for a long break?
         if self.reps % 6 == 0:
+            self.break_button.config(command=self.clicked_long_break)
             self.break_button.place(relx=0.5,rely=0.7, anchor='center')
             self.notifier.long_break_toast.show()
             self.notifier.play_alarm()
 
         # Is it time for a short break?
-        if self.reps % 2 == 0:
+        elif self.reps % 2 == 0:
+            self.break_button.config(command=self.clicked_short_break)
             self.break_button.place(relx=0.5,rely=0.7, anchor='center')
             self.notifier.short_break_toast.show()
             self.notifier.play_alarm()
@@ -193,7 +208,8 @@ class UI:
 
             # If it is the first work session, start timer immediately 
             else: 
-                self.config_for_work()
+                self.timer_label.config(text="Work")
+                self.reset_button.place(relx=0.5,rely=0.7, anchor='center')
                 self.canvas.place(relx=0.5,rely=0.475, anchor='center')
                 work_sec = self.work_min * 60
                 self.count_down(work_sec)    
