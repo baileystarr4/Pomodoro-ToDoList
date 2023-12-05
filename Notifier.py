@@ -6,9 +6,11 @@ class Notifier:
 
         #Initializing windows notification 
         # Icon by Leremy https://www.freepik.com/icon/healthy_10049659#fromView=search&term=stretching&page=1&position=4&track=ais
-        self.work_toast = Notification(app_id="Stretch Timer", duration = "short", title="Time to work!",
+        self.work_toast = Notification(app_id="Pomodoro", duration = "short", title="Time to work!",
                                   icon=r"C:\Users\Bailey\Documents\GitHub\Timer-App\notificaiton_icon.png")
-        self.break_toast =Notification(app_id="Stretch Timer", duration = "short", title="Time to break!",
+        self.long_break_toast =Notification(app_id="Pomodoro", duration = "short", title="Time for a long break!",
+                                  icon=r"C:\Users\Bailey\Documents\GitHub\Timer-App\notificaiton_icon.png")
+        self.short_break_toast =Notification(app_id="Pomodoro", duration = "short", title="Time for a short break!",
                                   icon=r"C:\Users\Bailey\Documents\GitHub\Timer-App\notificaiton_icon.png")
 
     def play_alarm(self):
