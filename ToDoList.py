@@ -1,5 +1,3 @@
-# This class is inspired by PROGRAMMED on YouTube. https://www.youtube.com/watch?v=COQ-T3qZkoA
-
 from tkinter import *
 from PIL import ImageTk,Image
 
@@ -10,6 +8,9 @@ class ToDoList:
         self.open_to_do = Button(self.w, image=self.img1, command=self.toggle_win, border=0, bg='#040D12', activebackground='#183D3D')
         self.open_to_do.place(x=5,y=10)
         
+        # self.active_task_font = font.Font(family="Courier", overstrike = 0)
+        self.active_task_font = ("Courier", 12)
+        self.finished_task_font = ("Courier", 12, "overstrike")
 
     def toggle_win(self):
         self.open_to_do.place_forget()
@@ -18,41 +19,36 @@ class ToDoList:
         self.img2 = ImageTk.PhotoImage(Image.open("close.png"))
         self.close_to_do = Button(self.f1, image=self.img2, border=0, command=self.dele, bg='#5C8374', activebackground='#5C8374')
         self.close_to_do.place(x=5,y=10)
+        
+        self.create_tasks()
 
 
-        #buttons
-        def bttn(x,y,text,bcolor,fcolor,cmd):
-     
-            def on_entera(e):
-                myButton1['background'] = bcolor #ffcc66
-                myButton1['foreground']= '#262626'  #000d33
+    def create_tasks(self):
+        x = 10
+        y = 80
+        tasks = ["sleep", "eat", "study"]
+        
 
-            def on_leavea(e):
-                myButton1['background'] = fcolor
-                myButton1['foreground']= '#262626'
-
-            myButton1 = Button(self.f1,text=text,
-                           width=42,
-                           height=2,
-                           fg='#262626',
+        for task in tasks:
+            new_button = Button(self.f1,text=task,
+                           font= self.active_task_font,
+                           justify= LEFT,
+                           wraplength=250,
+                           fg='#040D12',
                            border=0,
-                           bg=fcolor,
-                           activeforeground='#262626',
-                           activebackground=bcolor,            
-                            command=cmd)
-                      
-            myButton1.bind("<Enter>", on_entera)
-            myButton1.bind("<Leave>", on_leavea)
+                           bg='#5C8374',
+                           activeforeground='#040D12',
+                           activebackground='#5C8374')
 
-            myButton1.place(x=x,y=y)
+            new_button.config(command=lambda b = new_button: self.cross_off_task(b))
+            new_button.place(x=x, y=y, anchor='w')
+            y += 40
 
-        bttn(0,80,'A C E R','#5C8374','#5C8374',None)
-        bttn(0,117,'D E L L','#5C8374','#5C8374',None)
-        bttn(0,154,'A P P L E','#5C8374','#5C8374',None)
-        bttn(0,191,'A S U S','#5C8374','#5C8374',None)
-        bttn(0,228,'A C E R','#5C8374','#5C8374',None)
-        bttn(0,265,'A C E R','#5C8374','#5C8374',None)
+    def cross_off_task(self, button):
+        button.config(font=self.finished_task_font, command= lambda b = button: self.uncross_off_task(b))
 
+    def uncross_off_task(self, button):
+        button.config(font=self.active_task_font, command= lambda b = button: self.cross_off_task(b))
 
     def dele(self):
         self.f1.place_forget()
