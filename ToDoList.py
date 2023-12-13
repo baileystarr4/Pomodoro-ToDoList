@@ -25,28 +25,34 @@ class ToDoList:
         self.close_to_do.place(x=250,y=10)
 
         self.img3 = ImageTk.PhotoImage(Image.open("icons/add_icon.png"))
-        self.add_task = Button(self.f1, image=self.img3, border=0, command=self.dele, bg='#5C8374', activebackground='#5C8374')
-        self.add_task.place(x=50,y=430)
+        self.add_task_button = Button(self.f1, image=self.img3, border=0, command=self.dele, bg='#5C8374', activebackground='#5C8374')
+        self.add_task_button.place(x=50,y=430)
 
         self.img4 = ImageTk.PhotoImage(Image.open("icons/refresh_icon.png"))
-        self.refresh_to_do = Button(self.f1, image=self.img4, border=0, command=self.dele, bg='#5C8374', activebackground='#5C8374')
-        self.refresh_to_do.place(x=120,y=430)
+        self.refresh_button = Button(self.f1, image=self.img4, border=0, command=self.refresh_to_do_list, bg='#5C8374', activebackground='#5C8374')
+        self.refresh_button.place(x=120,y=430)
 
         self.img5 = ImageTk.PhotoImage(Image.open("icons/trash_icon.png"))
-        self.trash_to_do = Button(self.f1, image=self.img5, border=0, command=self.dele, bg='#5C8374', activebackground='#5C8374')
-        self.trash_to_do.place(x=190,y=430)
+        self.trash_button = Button(self.f1, image=self.img5, border=0, command=self.trash_to_do_list, bg='#5C8374', activebackground='#5C8374')
+        self.trash_button.place(x=190,y=430)
         
-        self.create_tasks()
+        self.initialize_task_list()
 
 
-    def create_tasks(self):
+    def initialize_task_list(self):
         x = 10
         y = 40
         df = pandas.read_csv('ToDoList.csv')
 
         for index, row in df.iterrows():
             if index < 10:
-                new_button = Button(self.f1,text=row["Task"],
+                self.create_task_button(row["Task"], y)
+                y += 40
+            else:
+                self.tasks[row['Task']] = None
+
+    def create_task_button(self, task, y):
+        new_button = Button(self.f1,text=task,
                             font= self.active_task_font,
                             justify= LEFT,
                             wraplength=250,
@@ -55,12 +61,9 @@ class ToDoList:
                             bg='#5C8374',
                             activeforeground='#040D12',
                             activebackground='#5C8374')
-                new_button.config(command=lambda b = new_button: self.cross_off_task(b))
-                new_button.place(x=x, y=y, anchor='w')
-                self.tasks[row["Task"]] = new_button
-                y += 40
-            else:
-                self.tasks[row['Task']] = None
+        new_button.config(command=lambda b = new_button: self.cross_off_task(b))
+        new_button.place(x=10, y=y, anchor='w')
+        self.tasks[task] = new_button
 
     def cross_off_task(self, button):
         button.config(font=self.finished_task_font, command= lambda b = button: self.uncross_off_task(b))
@@ -80,3 +83,23 @@ class ToDoList:
         self.f1.place_forget()
         self.open_to_do.place(x=5,y=10)
         self.update_csv()
+
+    def add_task(self, task):
+        # need to add input 
+        task_list_len = len(self.tasks)
+        if task_list_len < 10:
+            y = task_list_len * 40
+            self.create_task_button(task, y)
+        else:
+            self.tasks[task] = None
+    
+    def refresh_to_do_list(self):
+        # need to add an "are you sure" pop up
+        self.dele()
+        self.toggle_win()
+
+    def trash_to_do_list(self):
+        # need to add an "are you sure" pop up
+        self.tasks = defaultdict(None)
+        self.dele()
+        self.toggle_win()
