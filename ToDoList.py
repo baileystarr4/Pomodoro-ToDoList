@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox as mb
 from PIL import ImageTk,Image
 import pandas
 from collections import defaultdict
@@ -135,17 +136,18 @@ class ToDoList:
     def close_task_list(self):
         self.f1.place_forget()
         self.open_to_do.place(x=5,y=10)
-        
     
     def refresh_to_do_list(self):
-        # need to add an "are you sure" pop up
-        self.place_current_tasks()
-        self.clear_tasks(self.completed_tasks)
-        self.completed_tasks = {}
+        result = mb.askquestion('Refresh To Do List', 'Are you sure you want to refresh?\n\nDoing so will delete all completed tasks.')
+        if result == 'yes':
+            self.place_current_tasks()
+            self.clear_tasks(self.completed_tasks)
+            self.completed_tasks = {}
 
     def trash_to_do_list(self):
-        # need to add an "are you sure" pop up
-        self.clear_tasks(self.active_tasks, self.completed_tasks, self.queued_tasks)
-        self.completed_tasks = {}
-        self.active_tasks = {}
-        self.queued_tasks = {}
+        result = mb.askquestion('Trash To Do List', 'Are you sure you want to trash all tasks?')
+        if result == 'yes':
+            self.clear_tasks(self.active_tasks, self.completed_tasks, self.queued_tasks)
+            self.completed_tasks = {}
+            self.active_tasks = {}
+            self.queued_tasks = {}
