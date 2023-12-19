@@ -22,7 +22,7 @@ class UI:
         self.window.config(bg=self.DARK_COLOR)
         self.window.geometry('600x500')
 
-        #Initialize and place on screen widgets
+        # Initialize and place on screen widgets
         self.timer_label = Label(text="Pomodoro", font=(self.FONT_NAME, 50, "bold"), fg=self.LIGHT_COLOR, bg=self.DARK_COLOR)
         self.timer_label.place(relx=0.5,rely=0.25, anchor='center')
         self.default_button = Button(text="Default", command=self.clicked_default_button, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR,
@@ -31,6 +31,9 @@ class UI:
         self.custom_button = Button(text="Custom", command=self.clicked_custom_button, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR, 
                             font=(self.FONT_NAME, 15, "bold"), height=1, width=8)
         self.custom_button.place(relx=0.7,rely=0.6, anchor='center')
+
+        # Initilize to do list
+        self.to_do = ToDoList(self.window)
 
         #Initialize widgets for later use
         self.question_label = Label(font=(self.FONT_NAME, 18, "bold"), fg=self.LIGHT_COLOR, bg=self.DARK_COLOR)
