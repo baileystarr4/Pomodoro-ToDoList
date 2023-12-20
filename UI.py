@@ -14,6 +14,7 @@ class UI:
         self.timer = None
         self.notifier = Notifier()
         self.reps = 0
+        self.total_pomos = 5
         self.work_min = 45
         self.short_break_min = 15
         self.long_break_min = 30
@@ -28,9 +29,11 @@ class UI:
         self.timer_label = Label(text="Pomodoro", font=(self.FONT_NAME, 50, "bold"), fg=self.LIGHT_COLOR, bg=self.DARK_COLOR)
         self.timer_label.place(relx=0.5,rely=0.25, anchor='center')
         self.default_button = Button(text="Default", command=self.clicked_default_button, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR,
-                                font=(self.FONT_NAME, 15,"bold"), height=1, width=8).place(relx=0.3,rely=0.6, anchor='center')
+                                font=(self.FONT_NAME, 15,"bold"), height=1, width=8)
+        self.default_button.place(relx=0.3,rely=0.6, anchor='center')
         self.custom_button = Button(text="Custom", command=self.clicked_custom_button, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR, 
-                            font=(self.FONT_NAME, 15, "bold"), height=1, width=8).place(relx=0.7,rely=0.6, anchor='center')
+                            font=(self.FONT_NAME, 15, "bold"), height=1, width=8)
+        self.custom_button.place(relx=0.7,rely=0.6, anchor='center')
 
         # Initilize to do list
         self.to_do = ToDoList(self.window)
@@ -51,6 +54,7 @@ class UI:
                             font=(self.FONT_NAME, 15, "bold"), height=1, width=8) 
         self.break_button = Button(text="Break", command=self.clicked_short_break, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR, 
                             font=(self.FONT_NAME, 15, "bold"), height=1, width=8)
+        self.pomos_label = Label(font=(self.FONT_NAME, 18, "bold"), fg=self.LIGHT_COLOR, bg=self.DARK_COLOR)
         self.window.mainloop()
 
     # ---------------------------- BUTTON COMMANDS ------------------------------- # 
@@ -87,6 +91,14 @@ class UI:
         # Remove unnecessary widgets from the screen
         self.canvas.place_forget()
         self.reset_button.place_forget()
+        self.pomos_label.place_forget()
+
+        # Reset default settings
+        self.total_pomos = 5
+        self.total_pomos = 5
+        self.work_min = 45
+        self.short_break_min = 15
+        self.long_break_min = 30
 
         # Reset screen to the starting screen
         self.timer_label.config(text="Pomodoro")
@@ -101,6 +113,8 @@ class UI:
         self.notifier.stop_music()
         
         self.work_button.place_forget()
+
+        self.pomos_label.config(text=f"{(self.reps//2)+1}/{self.total_pomos}")
         self.timer_label.config(text="Work")
         self.reset_button.place(relx=0.5,rely=0.7, anchor='center')
 
@@ -177,19 +191,38 @@ class UI:
         else:            
             self.long_break_min = input    
 
+            # Ask user for input and reconfigure to save the total pomos
+            self.save_button.config(command=self.save_total_pomos)
+            self.entry.bind('<Return>', (lambda event: self.save_total_pomos()))
+            self.question_label.config(text="How many pomodoros would you like to do?")
+            self.entry.delete(0, END)
+            self.entry.insert(0, "5")
+    
+    def save_total_pomos(self):
+        try:
+            # Retrive the desired amount of pomos
+            input = int(self.entry.get())
+
+        # If the user did not enter an integer, display an error pop up    
+        except ValueError:
+            messagebox.showinfo(title="Error", message="Invalid input. Try Again.")    
+        else:            
+            self.total_pomos = input    
+
             # Remove unnecessary widgets from the screen
             self.entry.unbind('<Return>')
             self.question_label.place_forget()
             self.entry.place_forget()       
             self.save_button.place_forget()
 
-            self.start_timer()
+            self.start_timer()        
 
     # ---------------------------- TIMER ------------------------------- # 
     def start_timer(self):
         self.reps += 1
         self.reset_button.place_forget()
 
+        # Add an an end message with ability to add more 
         # Is it time for a long break?
         if self.reps % 6 == 0:
             self.break_button.config(command=self.clicked_long_break)
@@ -214,6 +247,8 @@ class UI:
 
             # If it is the first work session, start timer immediately 
             else: 
+                self.pomos_label.config(text=f"1/{self.total_pomos}")
+                self.pomos_label.place(relx=0.5,rely=0.1, anchor='center')
                 self.timer_label.config(text="Work")
                 self.reset_button.place(relx=0.5,rely=0.7, anchor='center')
                 self.canvas.place(relx=0.5,rely=0.475, anchor='center')
