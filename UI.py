@@ -2,11 +2,13 @@ from tkinter import *
 from tkinter import messagebox
 from Notifier import *
 import math
+from ToDoList import *
+from PIL import ImageTk,Image
 
 class UI:
     def __init__(self):
         self.DARK_COLOR = "#272829"
-        self.LIGHT_COLOR = "#D8D9DA"
+        self.LIGHT_COLOR = "#85a89b"
         self.FONT_NAME = "Courier"
 
         self.timer = None
@@ -16,22 +18,23 @@ class UI:
         self.short_break_min = 15
         self.long_break_min = 30
 
-        #Initialize and configure window
+        # Initialize and configure window
         self.window = Tk()
         self.window.title("Pomodoro")
         self.window.config(bg=self.DARK_COLOR)
-        self.window.geometry('600x500')
+        self.window.geometry('900x500')
 
         # Initialize and place on screen widgets
         self.timer_label = Label(text="Pomodoro", font=(self.FONT_NAME, 50, "bold"), fg=self.LIGHT_COLOR, bg=self.DARK_COLOR)
         self.timer_label.place(relx=0.5,rely=0.25, anchor='center')
         self.default_button = Button(text="Default", command=self.clicked_default_button, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR,
-                                font=(self.FONT_NAME, 15,"bold"), height=1, width=8)
-        self.default_button.place(relx=0.3,rely=0.6, anchor='center')
+                                font=(self.FONT_NAME, 15,"bold"), height=1, width=8).place(relx=0.3,rely=0.6, anchor='center')
         self.custom_button = Button(text="Custom", command=self.clicked_custom_button, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR, 
-                            font=(self.FONT_NAME, 15, "bold"), height=1, width=8)
-        self.custom_button.place(relx=0.7,rely=0.6, anchor='center')
+                            font=(self.FONT_NAME, 15, "bold"), height=1, width=8).place(relx=0.7,rely=0.6, anchor='center')
 
+        # Initilize to do list
+        self.to_do = ToDoList(self.window)
+ 
         # Initilize to do list
         self.to_do = ToDoList(self.window)
 
