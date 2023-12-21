@@ -55,6 +55,10 @@ class UI:
         self.break_button = Button(text="Break", command=self.clicked_short_break, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR, 
                             font=(self.FONT_NAME, 15, "bold"), height=1, width=8)
         self.pomos_label = Label(font=(self.FONT_NAME, 18, "bold"), fg=self.LIGHT_COLOR, bg=self.DARK_COLOR)
+        self.add_pomo_button = Button(text="Add Pomo", command=self.clicked_add_pomo, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR, 
+                            font=(self.FONT_NAME, 15, "bold"), height=1, width=8)
+        self.finish_session_button = Button(text="Finish", command=self.clicked_finish_button, bg=self.LIGHT_COLOR, fg=self.DARK_COLOR, 
+                            font=(self.FONT_NAME, 15, "bold"), height=1, width=8)
         self.window.mainloop()
 
     # ---------------------------- BUTTON COMMANDS ------------------------------- # 
@@ -103,6 +107,7 @@ class UI:
         # Reset screen to the starting screen
         self.timer_label.config(text="Pomodoro")
         self.default_button.place(relx=0.3,rely=0.6, anchor='center')
+        self.save_button.config(command=self.save_time_work)
         self.custom_button.place(relx=0.7,rely=0.6, anchor='center')
 
         # Reset timer
@@ -142,6 +147,22 @@ class UI:
 
         break_sec = self.short_break_min * 60
         self.count_down(break_sec)
+
+    def clicked_add_pomo(self):
+        self.question_label.place_forget()
+        self.add_pomo_button.place_forget()
+        self.finish_session_button.place_forget()
+        self.total_pomos += 1
+        self.reps += 1
+        self.canvas.place(relx=0.5,rely=0.475, anchor='center')
+        self.clicked_work()
+
+    def clicked_finish_button(self):
+        self.question_label.place_forget()
+        self.add_pomo_button.place_forget()
+        self.finish_session_button.place_forget()
+        self.clicked_reset_button()
+
     # ---------------------------- SAVE USER INPUT ------------------------------- # 
     def save_time_work(self):
         try:
@@ -222,9 +243,22 @@ class UI:
         self.reps += 1
         self.reset_button.place_forget()
 
-        # Add an an end message with ability to add more 
+        # Have you completed all the scheduled pomodoros?
+        # Would you like to add another or finish?
+        if ((self.reps//2)) == self.total_pomos:
+            self.canvas.place_forget()
+            self.pomos_label.config(text=f"{self.total_pomos}/{self.total_pomos}")
+            self.timer_label.config(text=f"{self.total_pomos} Pomodoros Completed!")
+            self.question_label.config(text="Would you like to add another pomodoro?")
+
+            self.question_label.place(relx=0.5,rely=0.425, anchor='center')
+            self.add_pomo_button.place(relx=0.3,rely=0.6, anchor='center')
+            self.finish_session_button.place(relx=0.7,rely=0.6, anchor='center')
+            # ADD toast noti. for finished
+            self.notifier.play_alarm()
+
         # Is it time for a long break?
-        if self.reps % 6 == 0:
+        elif self.reps % 6 == 0:
             self.break_button.config(command=self.clicked_long_break)
             self.break_button.place(relx=0.5,rely=0.7, anchor='center')
             self.notifier.long_break_toast.show()
