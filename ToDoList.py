@@ -4,10 +4,8 @@ from PIL import ImageTk,Image
 import pandas
 
 class ToDoList:
-    def __init__(self, window, reset_button, default_button):
+    def __init__(self, window):
         self.w = window
-        self.rb = reset_button
-        self.db = default_button
         self.img1 = ImageTk.PhotoImage(Image.open("icons/list_icon.png"))
         self.open_to_do = Button(self.w, image=self.img1, command=self.toggle_win, border=0, bg="#272829", activebackground="#272829")
         self.open_to_do.place(x=10,y=15)
@@ -30,7 +28,6 @@ class ToDoList:
 
     def toggle_win(self):
         self.open_to_do.place_forget()
-        self.rb.place_forget()
         
         self.f1.place(x=0,y=0)
         self.close_to_do.place(x=250,y=10)
@@ -138,8 +135,6 @@ class ToDoList:
     def close_task_list(self):
         self.f1.place_forget()
         self.open_to_do.place(x=5,y=10)
-        if not bool(self.db.winfo_ismapped()):
-            self.rb.place(relx=0.3,rely=0.7, anchor='center')
     
     def refresh_to_do_list(self):
         result = mb.askquestion('Refresh To Do List', 'Are you sure you want to refresh?\n\nDoing so will delete all completed tasks.')
