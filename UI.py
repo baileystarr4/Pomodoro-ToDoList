@@ -36,12 +36,6 @@ class UI:
                             font=(self.FONT_NAME, 15, "bold"), height=1, width=8)
         self.custom_button.place(relx=0.7,rely=0.6, anchor='center')
 
-        # Initilize to do list
-        self.to_do = ToDoList(self.window)
- 
-        # Initilize to do list
-        self.to_do = ToDoList(self.window)
-
         #Initialize widgets for later use
         self.question_label = Label(font=(self.FONT_NAME, 18, "bold"), fg=self.LIGHT_COLOR, bg=self.DARK_COLOR)
         self.entry = Entry(self.window, width=10, font=(self.FONT_NAME, 15,"bold"), justify= CENTER)
@@ -65,6 +59,10 @@ class UI:
         self.skip_button = Button(image=self.skip_icon, command=self.clicked_skip, bg=self.DARK_COLOR, activebackground= self.DARK_COLOR, border=0)
         self.pause_play_button = Button(image=self.pause_icon, command=self.clicked_pause, bg=self.DARK_COLOR, activebackground= self.DARK_COLOR, border=0)
         self.reset_button = Button(image=self.reset_icon, command=self.clicked_reset_button, bg=self.DARK_COLOR, activebackground= self.DARK_COLOR, border=0)
+
+        # Initilize to do list
+        self.to_do = ToDoList(self.window)
+
         self.window.mainloop()
 
     # ---------------------------- BUTTON COMMANDS ------------------------------- # 
@@ -122,6 +120,8 @@ class UI:
         self.work_min = 45
         self.short_break_min = 15
         self.long_break_min = 30
+        self.pause_play_button.config(image=self.pause_icon, command=self.clicked_pause)
+        self.paused = False
 
         # Reset screen to the starting screen
         self.timer_label.config(text="Pomodoro")
@@ -172,16 +172,20 @@ class UI:
     def clicked_skip(self):
         self.paused = False
         self.window.after_cancel(self.timer)
-        self.start_timer()
+        self.start_timer(skip = True)
 
     def clicked_add_pomo(self):
         self.question_label.place_forget()
         self.add_pomo_button.place_forget()
         self.finish_session_button.place_forget()
+
         self.total_pomos += 1
-        self.reps += 1
         self.canvas.place(relx=0.5,rely=0.475, anchor='center')
-        self.clicked_work()
+        self.reset_button.place(relx=0.3,rely=0.7, anchor='center')
+        self.pause_play_button.place(relx=0.5,rely=0.7, anchor='center')
+        self.skip_button.place(relx=0.7,rely=0.7, anchor='center')
+
+        self.start_timer()
 
     def clicked_finish_button(self):
         self.question_label.place_forget()
@@ -269,7 +273,7 @@ class UI:
             self.start_timer()        
 
     # ---------------------------- TIMER ------------------------------- # 
-    def start_timer(self):
+    def start_timer(self, skip = False):
         self.reps += 1
 
         # Have you completed all the scheduled pomodoros?
@@ -286,8 +290,9 @@ class UI:
             self.question_label.place(relx=0.5,rely=0.425, anchor='center')
             self.add_pomo_button.place(relx=0.3,rely=0.6, anchor='center')
             self.finish_session_button.place(relx=0.7,rely=0.6, anchor='center')
-            # ADD toast noti. for finished
-            self.notifier.play_alarm()
+
+            self.notifier.end_toast.show()
+            self.notifier.play_sound("end")
 
         # Is it time for a long break?
         elif self.reps % 6 == 0:
@@ -295,15 +300,18 @@ class UI:
             self.timer_label.config(text="Long Break")
             self.pause_play_button.config(command=self.clicked_long_break, image=self.play_icon)
             self.notifier.long_break_toast.show()
-            self.notifier.play_alarm()
+            if not skip:
+                self.notifier.play_sound("break")
+                self.notifier.long_break_toast.show()
 
         # Is it time for a short break?
         elif self.reps % 2 == 0:
             self.canvas.itemconfig(self.timer_text, text=f"{self.short_break_min}:00")
             self.timer_label.config(text="Short Break")
             self.pause_play_button.config(command=self.clicked_short_break, image=self.play_icon)
-            self.notifier.short_break_toast.show()
-            self.notifier.play_alarm()
+            if not skip:
+                self.notifier.short_break_toast.show()
+                self.notifier.play_sound("break")
 
         # If not, it's time to work
         else:
@@ -313,8 +321,9 @@ class UI:
                 self.pomos_label.config(text=f"{(self.reps//2)+1}/{self.total_pomos}")
                 self.canvas.itemconfig(self.timer_text, text=f"{self.work_min}:00")
                 self.pause_play_button.config(command=self.clicked_work, image=self.play_icon)
-                self.notifier.work_toast.show()
-                self.notifier.play_alarm()
+                if not skip:
+                    self.notifier.work_toast.show()
+                    self.notifier.play_sound("work")
 
             # If it is the first work session, start timer immediately 
             else: 
