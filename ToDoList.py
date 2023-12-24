@@ -10,34 +10,36 @@ class ToDoList:
         self.queued_tasks = {}
         self.ACTIVE_TASK_FONT = ("Courier", 12, "bold")
         self.FINISHED_TASK_FONT = ("Courier", 12, "overstrike")
+        self.LIGHT_COLOR = "#5C8374"
+        self.DARK_COLOR = "#272829"
 
         # Store root window and initilaze to do list frame
         self.window = window
-        self.frame = Frame(self.window,width=300,height=500,bg='#5C8374')
+        self.frame = Frame(self.window,width=300,height=500,bg=self.LIGHT_COLOR)
 
         # Initialize and place the open to do list button onto the root window
         self.list_icon = ImageTk.PhotoImage(Image.open("icons/list_icon.png"))
         self.open_to_do = Button(self.window, image=self.list_icon, command=self.toggle_frame, 
-                                 border=0, bg="#272829", activebackground="#272829")
+                                 border=0, bg=self.DARK_COLOR, activebackground=self.DARK_COLOR)
         self.open_to_do.place(x=10,y=15)
         
         # Initialize the widgets used when the to do list frame is opened
         self.close_icon = ImageTk.PhotoImage(Image.open("icons/close_icon.png"))
         self.close_to_do = Button(self.frame, image=self.close_icon, border=0, 
-                                  command=self.close_task_list, bg='#5C8374', 
-                                  activebackground='#5C8374')
+                                  command=self.close_task_list, bg=self.LIGHT_COLOR, 
+                                  activebackground=self.LIGHT_COLOR)
         self.add_icon = ImageTk.PhotoImage(Image.open("icons/add_icon.png"))
         self.add_task_button = Button(self.frame, image=self.add_icon, border=0,
-                                      command=self.add_task, bg='#5C8374', 
-                                      activebackground='#5C8374')
+                                      command=self.add_task, bg=self.LIGHT_COLOR, 
+                                      activebackground=self.LIGHT_COLOR)
         self.refresh_icon = ImageTk.PhotoImage(Image.open("icons/refresh_icon.png"))
         self.refresh_button = Button(self.frame, image=self.refresh_icon, border=0, 
-                                     command=self.refresh_to_do_list, bg='#5C8374', 
-                                     activebackground='#5C8374')
+                                     command=self.refresh_to_do_list, bg=self.LIGHT_COLOR, 
+                                     activebackground=self.LIGHT_COLOR)
         self.trash_icon = ImageTk.PhotoImage(Image.open("icons/trash_icon.png"))
         self.trash_button = Button(self.frame, image=self.trash_icon, border=0, 
-                                   command=self.trash_to_do_list, bg='#5C8374', 
-                                   activebackground='#5C8374')
+                                   command=self.trash_to_do_list, bg=self.LIGHT_COLOR, 
+                                   activebackground=self.LIGHT_COLOR)
         self.add_task_input = Entry(self.frame, width=20, font=self.ACTIVE_TASK_FONT, 
                                     justify= CENTER)
 
@@ -88,11 +90,11 @@ class ToDoList:
                             font= self.ACTIVE_TASK_FONT,
                             justify= LEFT,
                             wraplength=250,
-                            fg='#272829',
+                            fg=self.DARK_COLOR,
                             border=0,
-                            bg='#5C8374',
-                            activeforeground='#272829',
-                            activebackground='#5C8374')
+                            bg=self.LIGHT_COLOR,
+                            activeforeground=self.DARK_COLOR,
+                            activebackground=self.LIGHT_COLOR)
         new_button.config(command=lambda b = new_button, t = task: self.cross_off_task(b,t))
 
         self.active_tasks[task] = new_button
