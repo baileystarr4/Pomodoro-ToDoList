@@ -139,6 +139,7 @@ class ToDoList:
 
         # Reset the to do list frame and buttons.
         self.add_task_input.place_forget()
+        self.add_task_input.delete(0, END)
         self.add_task_input.unbind('<Return>')
         self.refresh_button.place(x=125,y=430)
         self.trash_button.place(x=200,y=430)
