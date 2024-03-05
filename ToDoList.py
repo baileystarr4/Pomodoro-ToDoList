@@ -168,6 +168,8 @@ class ToDoList:
             self.completed_tasks = {}
             self.active_tasks = {}
             self.queued_tasks = {}
+            self.update_csv()
+            
 
     def clear_tasks_from_frame(self, dict1, dict2 = None):
         for task in dict1.keys():
@@ -195,7 +197,6 @@ class ToDoList:
             
         for task in self.queued_tasks.keys():
             remaining_tasks['Task'].append(task)
-        if not remaining_tasks['Task']:
-            return
+
         df = pandas.DataFrame(remaining_tasks)
         df.to_csv('ToDoList.csv', index=False)
