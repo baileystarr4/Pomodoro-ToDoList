@@ -16,7 +16,6 @@ class ToDoList:
         # Store root window and initilaze to do list frame
         self.window = window
         self.frame = Frame(self.window,width=300,height=500,bg=self.LIGHT_COLOR)
-        self.window.bind('<Tab>', (lambda event: self.toggle_frame()))
 
         # Initialize and place the open to do list button onto the root window
         self.list_icon = ImageTk.PhotoImage(Image.open("icons/list_icon.png"))
@@ -58,8 +57,6 @@ class ToDoList:
             self.get_task_list()
         else:
             self.place_current_tasks()
-
-        self.window.bind('<Tab>', (lambda event: self.close_task_list()))
 
 
     def get_task_list(self):
@@ -187,7 +184,6 @@ class ToDoList:
 
         self.frame.place_forget()
         self.open_to_do.place(x=5,y=10)
-        self.window.bind('<Tab>', (lambda event: self.toggle_frame()))
 
     def update_csv(self):
         remaining_tasks = {'Task': []}

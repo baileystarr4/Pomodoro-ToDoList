@@ -128,7 +128,6 @@ class UI:
         self.pause_play_button.place_forget()
         self.skip_button.place_forget()
         self.pomos_label.place_forget()
-        self.window.unbind('<space>')
 
         # Reset to default settings.
         self.reps = 1
@@ -148,12 +147,10 @@ class UI:
     def clicked_pause(self):
         self.paused = True
         self.pause_play_button.config(command=self.clicked_play, image=self.play_icon)
-        self.window.bind('<space>', (lambda event: self.clicked_play()))
     
     def clicked_play(self):
         self.paused = False
         self.pause_play_button.config(command=self.clicked_pause, image=self.pause_icon)
-        self.window.bind('<space>', (lambda event: self.clicked_pause()))
 
     def clicked_skip(self):
         # Set pause to false so the next session can start properly
@@ -334,7 +331,6 @@ class UI:
         self.pomos_label.place(relx=0.5,rely=0.1, anchor='center')
         self.timer_label.config(text="Work")
         self.timer_canvas.place(relx=0.5,rely=0.475, anchor='center')
-        self.window.bind('<space>', (lambda event: self.clicked_pause()))
 
         self.start_next_session("work")
 
