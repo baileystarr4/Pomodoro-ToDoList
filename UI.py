@@ -252,8 +252,7 @@ class UI:
             self.add_pomo_button.place(relx=0.3,rely=0.6, anchor='center')
             self.finish_session_button.place(relx=0.7,rely=0.6, anchor='center')
             
-            self.notifier.end_toast.show()
-            self.notifier.play_sound("end")
+            self.notifier.notify("end")
 
         # Is it time for a long break?
         elif self.reps % 6 == 0:
@@ -262,8 +261,7 @@ class UI:
             self.pause_play_button.config(command=(lambda: self.start_next_session("long")),
                                           image=self.play_icon)
             if alarm:
-                self.notifier.play_sound("break")
-                self.notifier.long_break_toast.show()
+                self.notifier.notify("long break")
 
         # Is it time for a short break?
         elif self.reps % 2 == 0:
@@ -272,8 +270,7 @@ class UI:
             self.pause_play_button.config(command=(lambda: self.start_next_session("short")),
                                           image=self.play_icon)
             if alarm:
-                self.notifier.short_break_toast.show()
-                self.notifier.play_sound("break")
+                self.notifier.notify("short break")
 
         # If not, it's time to work
         else:
@@ -283,8 +280,7 @@ class UI:
             self.pause_play_button.config(command=(lambda: self.start_next_session("work")),
                                             image=self.play_icon)
             if alarm:
-                self.notifier.work_toast.show()
-                self.notifier.play_sound("work")    
+                self.notifier.notify("work")    
 
     def count_down(self,count):
         # Count down mechanism

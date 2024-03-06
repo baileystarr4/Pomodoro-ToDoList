@@ -11,15 +11,20 @@ class Notifier:
         self.short_break_toast =Notification(app_id="Pomodoro", duration = "short", title="Time for a short break!")
         self.end_toast =Notification(app_id="Pomodoro", duration = "short", title="You have completed all your pomodoros! Congrats!")
         
-    def play_sound(self, session):
-    # This method plays the correct sound given what session is about to start.
+    def notify(self, session):
     # Notification sounds from https://noproblo.dayjo.org/ZeldaSounds/
         
-        if session == "break":
+        if session == "long break":
+            self.long_break_toast.show()
+            pygame.mixer.music.load("notifier_sounds/BOTW_Fanfare_SmallItem.wav")
+        elif session == "short break":
+            self.short_break_toast.show()
             pygame.mixer.music.load("notifier_sounds/BOTW_Fanfare_SmallItem.wav")
         elif session == "work":
+            self.work_toast.show()
             pygame.mixer.music.load("notifier_sounds/BOTW_Secret.wav")
         elif session == "end":
+            self.end_toast.show()
             pygame.mixer.music.load("notifier_sounds/BOTW_Fanfare_SpiritOrb.wav")
 
         pygame.mixer.music.play()
