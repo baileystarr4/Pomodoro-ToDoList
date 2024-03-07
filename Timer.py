@@ -5,7 +5,7 @@ import math
 from ToDoList import *
 from PIL import ImageTk,Image
 
-class UI:
+class Timer:
     def __init__(self):
         self.DARK_COLOR = "#272829"
         self.LIGHT_COLOR = "#85a89b"

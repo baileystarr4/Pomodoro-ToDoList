@@ -1,7 +1,7 @@
-from UI import *
+from Timer import *
 
 def main():
-    ui = UI()
+    timer = Timer()
 
 if __name__ == "__main__":
     main()
