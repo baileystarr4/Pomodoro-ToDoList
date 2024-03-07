@@ -174,16 +174,24 @@ class Timer:
         self.count_down(seconds) 
 
     def clicked_add_pomo(self):
-        self.clear_end_screen()
-        self.total_pomos += 1
+        self.add_pomo_button.place_forget()
+        self.finish_session_button.place_forget()
 
-        # Reset timer screen and start timer without an alarm
-        self.timer_canvas.place(relx=0.5,rely=0.475, anchor='center')
-        self.place_timer_buttons()
-        self.start_timer(alarm=False)
+        # Ask for user input.
+        self.question_label.config(text="How many more would you like to add?")
+
+        # Add entry and save button widgets to the screen.
+        self.entry.place(relx=0.5,rely=0.55, anchor='center')
+        self.entry.focus()
+        self.entry.delete(0, END)
+        self.entry.insert(0, "30")
+        self.entry.bind('<Return>', (lambda event: self.save_total_pomos(adding = True)))
+        self.save_button.place(relx=0.5,rely=0.7, anchor='center')
 
     def clicked_finish_button(self):
-        self.clear_end_screen()
+        self.question_label.place_forget()
+        self.add_pomo_button.place_forget()
+        self.finish_session_button.place_forget()
         self.clicked_reset_button(reset_alert=False)
 
     # ---------------------------- SAVE USER INPUT ------------------------------- # 
@@ -220,8 +228,12 @@ class Timer:
             self.entry.delete(0, END)
             self.entry.insert(0, "5")
     
-    def save_total_pomos(self):
-        self.total_pomos = self.try_to_get_input()    
+    def save_total_pomos(self, adding = False):
+        # if we are adding more pomos
+        if adding == True:
+            self.total_pomos = self.try_to_get_input() + self.total_pomos
+        else:
+            self.total_pomos = self.try_to_get_input()
 
         if self.total_pomos != 0:
             # Remove unnecessary widgets from the screen
@@ -323,14 +335,9 @@ class Timer:
         self.place_timer_buttons()
 
         #Configure and place timer screen.
-        self.pomos_label.config(text=f"1/{self.total_pomos}")
+        self.pomos_label.config(text=f"{(self.reps//2)+1}/{self.total_pomos}")
         self.pomos_label.place(relx=0.5,rely=0.1, anchor='center')
         self.timer_label.config(text="Work")
         self.timer_canvas.place(relx=0.5,rely=0.475, anchor='center')
 
         self.start_next_session("work")
-
-    def clear_end_screen(self):
-        self.question_label.place_forget()
-        self.add_pomo_button.place_forget()
-        self.finish_session_button.place_forget()
