@@ -89,7 +89,7 @@ class ToDoList:
         new_button = Button(self.frame,text=task,
                             font= self.ACTIVE_TASK_FONT,
                             justify= LEFT,
-                            wraplength=250,
+                            wraplength=230,
                             fg=self.DARK_COLOR,
                             border=0,
                             bg=self.LIGHT_COLOR,
