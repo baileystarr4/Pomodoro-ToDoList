@@ -61,7 +61,7 @@ class ToDoList:
 
     def get_task_list(self):
         y = 40
-        df = pandas.read_csv('ToDoList.csv')
+        df = pandas.read_csv('to_do_list.csv')
         for index, row in df.iterrows():
             # For the first 10 tasks in the csv, create a button and place it on the to do list frame.
             if index < 10:
@@ -195,4 +195,4 @@ class ToDoList:
             remaining_tasks['Task'].append(task)
 
         df = pandas.DataFrame(remaining_tasks)
-        df.to_csv('ToDoList.csv', index=False)
+        df.to_csv('to_do_list.csv', index=False)

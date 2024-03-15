@@ -1,4 +1,4 @@
-from Timer import *
+from timer import *
 
 def main():
     timer = Timer()

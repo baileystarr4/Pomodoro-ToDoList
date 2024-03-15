@@ -1,8 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
-from Notifier import *
+from notifier import *
 import math
-from ToDoList import *
+from to_do_list import *
 from PIL import ImageTk,Image
 
 class Timer:
