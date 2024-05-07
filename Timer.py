@@ -26,18 +26,34 @@ class Timer:
         self.window.geometry('900x500')
 
         # Initialize and place on screen widgets.
-        self.timer_label = Label(text="Pomodoro", font=(self.FONT_NAME, 50, "bold"), 
-                                 fg=self.LIGHT_COLOR, bg=self.DARK_COLOR)
+        self.timer_label = Label(
+            text="Pomodoro", 
+            font=(self.FONT_NAME, 50, "bold"), 
+            fg=self.LIGHT_COLOR, 
+            bg=self.DARK_COLOR
+        )
         self.timer_label.place(relx=0.5,rely=0.25, anchor='center')
-        self.default_button = Button(text="Default", command=self.clicked_default_button, 
-                                     bg=self.LIGHT_COLOR, activebackground= self.LIGHT_COLOR, 
-                                     fg=self.DARK_COLOR, font=(self.FONT_NAME, 15,"bold"), 
-                                     height=1, width=8)
+        self.default_button = Button(
+            text="Default", 
+            command=self.clicked_default_button, 
+            bg=self.LIGHT_COLOR, 
+            activebackground= self.LIGHT_COLOR, 
+            fg=self.DARK_COLOR, 
+            font=(self.FONT_NAME, 15,"bold"), 
+            height=1, 
+            width=8
+        )
         self.default_button.place(relx=0.3,rely=0.6, anchor='center')
-        self.custom_button = Button(text="Custom", command=self.clicked_custom_button, 
-                                    bg=self.LIGHT_COLOR, activebackground= self.LIGHT_COLOR, 
-                                    fg=self.DARK_COLOR, font=(self.FONT_NAME, 15, "bold"), 
-                                    height=1, width=8)
+        self.custom_button = Button(
+            text="Custom", 
+            command=self.clicked_custom_button, 
+            bg=self.LIGHT_COLOR, 
+            activebackground= self.LIGHT_COLOR, 
+            fg=self.DARK_COLOR, 
+            font=(self.FONT_NAME, 15, "bold"), 
+            height=1, 
+            width=8
+        )
         self.custom_button.place(relx=0.7,rely=0.6, anchor='center')
 
         #Initialize icons for timer buttons.
@@ -47,38 +63,86 @@ class Timer:
         self.pause_icon = ImageTk.PhotoImage(Image.open("icons/pause_icon.png"))
 
         #Initialize widgets for later use.
-        self.question_label = Label(font=(self.FONT_NAME, 18, "bold"), fg=self.LIGHT_COLOR, 
-                                    bg=self.DARK_COLOR)
-        self.entry = Entry(self.window, width=10, font=(self.FONT_NAME, 15,"bold"), 
-                           justify= CENTER)
-        self.save_button = Button(text="Save", command=self.save_time_work, 
-                                  bg=self.LIGHT_COLOR, activebackground= self.LIGHT_COLOR, 
-                                  fg=self.DARK_COLOR, font=(self.FONT_NAME, 15, "bold"), 
-                                  height=1, width=8)
-        
-        self.pomos_label = Label(font=(self.FONT_NAME, 18, "bold"), fg=self.LIGHT_COLOR, 
-                                 bg=self.DARK_COLOR)
-        self.timer_canvas = Canvas(width=200, height=100, bg=self.DARK_COLOR, highlightthickness=0)
-        self.timer_text = self.timer_canvas.create_text(100, 50, text="00:00", fill = self.LIGHT_COLOR,
-                                                  font=(self.FONT_NAME, 40, "bold"))
-        self.skip_button = Button(image=self.skip_icon, command=self.clicked_skip, 
-                                  bg=self.DARK_COLOR, activebackground= self.DARK_COLOR,
-                                  border=0)
-        self.pause_play_button = Button(image=self.pause_icon, command=self.clicked_pause, 
-                                        bg=self.DARK_COLOR, activebackground= self.DARK_COLOR,
-                                        border=0)
-        self.reset_button = Button(image=self.reset_icon, command=self.clicked_reset_button, 
-                                   bg=self.DARK_COLOR, activebackground= self.DARK_COLOR, 
-                                   border=0)
-        
-        self.add_pomo_button = Button(text="Add Pomo", command=self.clicked_add_pomo, 
-                                      bg=self.LIGHT_COLOR, activebackground= self.LIGHT_COLOR, 
-                                      fg=self.DARK_COLOR, font=(self.FONT_NAME, 15, "bold"), 
-                                      height=1, width=8)
-        self.finish_session_button = Button(text="Finish", command=self.clicked_finish_button, 
-                                            bg=self.LIGHT_COLOR, activebackground= self.LIGHT_COLOR, 
-                                            fg=self.DARK_COLOR, font=(self.FONT_NAME, 15, "bold"), 
-                                            height=1, width=8)
+        self.question_label = Label(
+            font=(self.FONT_NAME, 18, "bold"), 
+            fg=self.LIGHT_COLOR, 
+            bg=self.DARK_COLOR
+        )
+        self.entry = Entry(
+            self.window, 
+            width=10, 
+            font=(self.FONT_NAME, 15,"bold"), 
+            justify= CENTER
+        )
+        self.save_button = Button(
+            text="Save", 
+            command=self.save_time_work, 
+            bg=self.LIGHT_COLOR, 
+            activebackground= self.LIGHT_COLOR, 
+            fg=self.DARK_COLOR, 
+            font=(self.FONT_NAME, 15, "bold"), 
+            height=1, 
+            width=8
+        )
+        self.pomos_label = Label(
+            font=(self.FONT_NAME, 18, "bold"), 
+            fg=self.LIGHT_COLOR, 
+            bg=self.DARK_COLOR
+        )
+        self.timer_canvas = Canvas(
+            width=200, 
+            height=100, 
+            bg=self.DARK_COLOR, 
+            highlightthickness=0
+        )
+        self.timer_text = self.timer_canvas.create_text(
+            100, 
+            50, 
+            text="00:00", 
+            fill = self.LIGHT_COLOR,
+            font=(self.FONT_NAME, 40, "bold")
+        )
+        self.skip_button = Button(
+            image=self.skip_icon, 
+            command=self.clicked_skip, 
+            bg=self.DARK_COLOR, 
+            activebackground= self.DARK_COLOR,
+            border=0
+        )
+        self.pause_play_button = Button(
+            image=self.pause_icon, 
+            command=self.clicked_pause, 
+            bg=self.DARK_COLOR, 
+            activebackground= self.DARK_COLOR,
+            border=0
+        )
+        self.reset_button = Button(
+            image=self.reset_icon, 
+            command=self.clicked_reset_button, 
+            bg=self.DARK_COLOR, 
+            activebackground= self.DARK_COLOR, 
+            border=0
+        )
+        self.add_pomo_button = Button(
+            text="Add Pomo", 
+            command=self.clicked_add_pomo, 
+            bg=self.LIGHT_COLOR,
+            activebackground= self.LIGHT_COLOR, 
+            fg=self.DARK_COLOR, 
+            font=(self.FONT_NAME, 15, "bold"), 
+            height=1, 
+            width=8
+        )
+        self.finish_session_button = Button(
+            text="Finish", 
+            command=self.clicked_finish_button, 
+            bg=self.LIGHT_COLOR, 
+            activebackground= self.LIGHT_COLOR, 
+            fg=self.DARK_COLOR, 
+            font=(self.FONT_NAME, 15, "bold"), 
+            height=1, 
+            width=8
+        )
 
         # Initilize to do list and notifier.
         self.to_do = ToDoList(self.window)
@@ -89,7 +153,7 @@ class Timer:
         # After the window closes, update the to do csv.
         self.to_do.update_csv()
 
-    # ---------------------------- BUTTON COMMANDS ------------------------------- # 
+    # ---------------------- BUTTON COMMANDS ---------------------- # 
     def clicked_default_button(self):
         self.custom_button.place_forget()
         self.default_button.place_forget()
@@ -100,7 +164,9 @@ class Timer:
         self.default_button.place_forget()
 
         # Ask for user input.
-        self.question_label.config(text="How long would you like to work? \n Enter in minutes")
+        self.question_label.config(
+            text="How long would you like to work? \n Enter in minutes"
+        )
         self.question_label.place(relx=0.5,rely=0.425, anchor='center')
 
         # Add entry and save button widgets to the screen.
@@ -114,7 +180,9 @@ class Timer:
     def clicked_reset_button(self, reset_alert = True):
         if reset_alert:
             self.clicked_pause()
-            result = mb.askquestion('Reset Pomodoro Timer', 'Are you sure you want to reset?')
+            result = mb.askquestion(
+                'Reset Pomodoro Timer', 'Are you sure you want to reset?'
+            )
             if result == 'no':
                 self.clicked_play()
                 return
@@ -135,7 +203,10 @@ class Timer:
         self.work_min = 45
         self.short_break_min = 15
         self.long_break_min = 30
-        self.pause_play_button.config(image=self.pause_icon, command=self.clicked_pause)
+        self.pause_play_button.config(
+            image=self.pause_icon, 
+            command=self.clicked_pause
+        )
         self.paused = False
 
         # Reset to the starting screen.
@@ -146,23 +217,33 @@ class Timer:
 
     def clicked_pause(self):
         self.paused = True
-        self.pause_play_button.config(command=self.clicked_play, image=self.play_icon)
+        self.pause_play_button.config(
+            command=self.clicked_play, 
+            image=self.play_icon
+        )
     
     def clicked_play(self):
         self.paused = False
-        self.pause_play_button.config(command=self.clicked_pause, image=self.pause_icon)
+        self.pause_play_button.config(
+            command=self.clicked_pause, 
+            image=self.pause_icon
+        )
 
     def clicked_skip(self):
-        # Set pause to false so the next session can start properly
+        # Set pause to false so the next session can start properly.
         self.paused = False
-        # Stop and restart timer with no alarm
+        # Stop and restart timer with no alarm.
         self.window.after_cancel(self.timer)
         self.start_timer(alarm=False)
 
     def start_next_session(self, session):
-        # Stop alarm, reconfigure the pause/play button to pause, and start the count down
+        # Stop alarm, reconfigure the pause/play button to pause, 
+        # and start the count down.
         self.notifier.stop_sound()
-        self.pause_play_button.config(command=self.clicked_pause, image=self.pause_icon)
+        self.pause_play_button.config(
+            command=self.clicked_pause, 
+            image=self.pause_icon
+        )
 
         if session == "work":
             seconds = self.work_min * 60
@@ -185,7 +266,10 @@ class Timer:
         self.entry.focus()
         self.entry.delete(0, END)
         self.entry.insert(0, "30")
-        self.entry.bind('<Return>', (lambda event: self.save_total_pomos(adding = True)))
+        self.entry.bind(
+            '<Return>', 
+            (lambda event: self.save_total_pomos(adding = True))
+        )
         self.save_button.place(relx=0.5,rely=0.7, anchor='center')
 
     def clicked_finish_button(self):
@@ -194,15 +278,32 @@ class Timer:
         self.finish_session_button.place_forget()
         self.clicked_reset_button(reset_alert=False)
 
-    # ---------------------------- SAVE USER INPUT ------------------------------- # 
+    # ---------------------- SAVE USER INPUT ---------------------- # 
+    def try_to_get_input(self):
+        try:
+            input = int(self.entry.get())
+
+        # If the user did not enter an integer, 
+        # display an error pop up and return 0 to try again. 
+        except ValueError:
+            messagebox.showinfo(title="Error", message="Invalid input time. Try Again.")
+            return 0
+        else:
+            return input
+        
     def save_time_work(self):  
         self.work_min = self.try_to_get_input()
 
         if self.work_min != 0:
-            # Ask user for next input and reconfigure the save button to save the short break time
+            # Ask user for short break time and reconfigure the save button
             self.save_button.config(command=self.save_time_short_break)
-            self.entry.bind('<Return>', (lambda event: self.save_time_short_break()))
-            self.question_label.config(text="How long would you like the short break to be?\n Enter in minutes")
+            self.entry.bind(
+                '<Return>', 
+                (lambda event: self.save_time_short_break())
+            )
+            self.question_label.config(
+                text="How long would you like the short break to be?\n Enter in minutes"
+            )
             self.entry.delete(0, END)
             self.entry.insert(0, "5")
 
@@ -210,10 +311,15 @@ class Timer:
         self.short_break_min = self.try_to_get_input()
 
         if self.short_break_min != 0:
-            # Ask user for next input and reconfigure the save button to save the long break time
+            # Ask user for long break time and reconfigure the save button
             self.save_button.config(command=self.save_time_long_break)
-            self.entry.bind('<Return>', (lambda event: self.save_time_long_break()))
-            self.question_label.config(text="How long would you like the long break to be?\n Enter in minutes")
+            self.entry.bind(
+                '<Return>', 
+                (lambda event: self.save_time_long_break())
+            )
+            self.question_label.config(
+                text="How long would you like the long break to be?\n Enter in minutes"
+            )
             self.entry.delete(0, END)
             self.entry.insert(0, "15")
 
@@ -221,15 +327,19 @@ class Timer:
         self.long_break_min = self.try_to_get_input()
 
         if self.long_break_min != 0:
-            # Ask user for next input and reconfigure the save button to save the total pomos
+            # Ask user for total pomos and reconfigure the save button
             self.save_button.config(command=self.save_total_pomos)
-            self.entry.bind('<Return>', (lambda event: self.save_total_pomos()))
-            self.question_label.config(text="How many pomodoros would you like to do?")
+            self.entry.bind(
+                '<Return>', 
+                (lambda event: self.save_total_pomos())
+            )
+            self.question_label.config(
+                text="How many pomodoros would you like to do?"
+            )
             self.entry.delete(0, END)
             self.entry.insert(0, "5")
     
     def save_total_pomos(self, adding = False):
-        # if we are adding more pomos
         if adding == True:
             self.total_pomos = self.try_to_get_input() + self.total_pomos
         else:
@@ -258,8 +368,12 @@ class Timer:
             self.skip_button.place_forget()
 
             # Show end screen
-            self.timer_label.config(text=f"{self.total_pomos} Pomodoros Completed!")
-            self.question_label.config(text="Would you like to add another pomodoro?")
+            self.timer_label.config(
+                text=f"{self.total_pomos} Pomodoros Completed!"
+            )
+            self.question_label.config(
+                text="Would you like to add another pomodoro?"
+            )
             self.question_label.place(relx=0.5,rely=0.425, anchor='center')
             self.add_pomo_button.place(relx=0.3,rely=0.6, anchor='center')
             self.finish_session_button.place(relx=0.7,rely=0.6, anchor='center')
@@ -268,45 +382,66 @@ class Timer:
 
         # Is it time for a long break?
         elif self.reps % 6 == 0:
-            self.timer_canvas.itemconfig(self.timer_text, text=f"{self.long_break_min}:00")
+            self.timer_canvas.itemconfig(
+                self.timer_text, 
+                text=f"{self.long_break_min}:00"
+            )
             self.timer_label.config(text="Long Break")
-            self.pause_play_button.config(command=(lambda: self.start_next_session("long")),
-                                          image=self.play_icon)
+            self.pause_play_button.config(
+                command=(lambda: self.start_next_session("long")),
+                image=self.play_icon
+            )
             if alarm:
                 self.notifier.notify("long break")
 
         # Is it time for a short break?
         elif self.reps % 2 == 0:
-            self.timer_canvas.itemconfig(self.timer_text, text=f"{self.short_break_min}:00")
+            self.timer_canvas.itemconfig(
+                self.timer_text, 
+                text=f"{self.short_break_min}:00"
+            )
             self.timer_label.config(text="Short Break")
-            self.pause_play_button.config(command=(lambda: self.start_next_session("short")),
-                                          image=self.play_icon)
+            self.pause_play_button.config(
+                command=(lambda: self.start_next_session("short")),
+                image=self.play_icon
+            )
             if alarm:
                 self.notifier.notify("short break")
 
-        # If not, it's time to work
+        # If not, it's time to work.
         else:
             self.timer_label.config(text="Work")
-            self.pomos_label.config(text=f"{(self.reps//2)+1}/{self.total_pomos}")
-            self.timer_canvas.itemconfig(self.timer_text, text=f"{self.work_min}:00")
-            self.pause_play_button.config(command=(lambda: self.start_next_session("work")),
-                                            image=self.play_icon)
+            self.pomos_label.config(
+                text=f"{(self.reps//2)+1}/{self.total_pomos}"
+            )
+            self.timer_canvas.itemconfig(
+                self.timer_text, 
+                text=f"{self.work_min}:00"
+            )
+            self.pause_play_button.config(
+                command=(lambda: self.start_next_session("work")),
+                image=self.play_icon
+            )
             if alarm:
                 self.notifier.notify("work")    
 
     def count_down(self,count):
-        # Count down mechanism
         count_min = math.floor(count / 60)
         count_sec = count % 60
+
         if count_min < 10:
             count_min=f"0{count_min}"
         if count_sec < 10:
             count_sec=f"0{count_sec}"
 
-        # Update timer on screen
-        self.timer_canvas.itemconfig(self.timer_text, text=f"{count_min}:{count_sec}")
+        # Update timer on screen.
+        self.timer_canvas.itemconfig(
+            self.timer_text, 
+            text=f"{count_min}:{count_sec}"
+        )
 
-        # If the timer has not ended and is not paused, continue counting down
+        # If the timer has not ended and is not paused, 
+        # continue counting down.
         if count:
             if not self.paused:
                 count -= 1
@@ -314,18 +449,7 @@ class Timer:
         else:
             self.start_timer()
 
-# ---------------------------- HELPER METHODS  ------------------------------- # 
-    def try_to_get_input(self):
-        try:
-            input = int(self.entry.get())
-
-        # If the user did not enter an integer, display an error pop up and return 0 to try again. 
-        except ValueError:
-            messagebox.showinfo(title="Error", message="Invalid input time. Try Again.")
-            return 0
-        else:
-            return input
-        
+# ---------------------------- HELPERS  ---------------------------- # 
     def place_timer_buttons(self):
         self.reset_button.place(relx=0.3,rely=0.7, anchor='center')
         self.pause_play_button.place(relx=0.5,rely=0.7, anchor='center')

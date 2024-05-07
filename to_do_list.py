@@ -13,39 +13,70 @@ class ToDoList:
         self.LIGHT_COLOR = "#5C8374"
         self.DARK_COLOR = "#272829"
 
-        # Store root window and initilaze to do list frame
+        # Store root window and initilaze to do list frame.
         self.window = window
         self.frame = Frame(self.window,width=300,height=500,bg=self.LIGHT_COLOR)
 
-        # Initialize and place the open to do list button onto the root window
+        # Initialize and place the to do list button onto the root window.
         self.list_icon = ImageTk.PhotoImage(Image.open("icons/list_icon.png"))
-        self.open_to_do = Button(self.window, image=self.list_icon, command=self.toggle_frame, 
-                                 border=0, bg=self.DARK_COLOR, activebackground=self.DARK_COLOR)
+        self.open_to_do = Button(
+            self.window, 
+            image=self.list_icon, 
+            command=self.toggle_frame, 
+            border=0, 
+            bg=self.DARK_COLOR, 
+            activebackground=self.DARK_COLOR
+        )
         self.open_to_do.place(x=10,y=15)
         
-        # Initialize the widgets used when the to do list frame is opened
+        # Initialize the widgets used when the to do list frame is opened.
         self.close_icon = ImageTk.PhotoImage(Image.open("icons/close_icon.png"))
-        self.close_to_do = Button(self.frame, image=self.close_icon, border=0, 
-                                  command=self.close_task_list, bg=self.LIGHT_COLOR, 
-                                  activebackground=self.LIGHT_COLOR)
+        self.close_to_do = Button(
+            self.frame, 
+            image=self.close_icon, 
+            border=0, 
+            command=self.close_task_list, 
+            bg=self.LIGHT_COLOR, 
+            activebackground=self.LIGHT_COLOR
+        )
         self.add_icon = ImageTk.PhotoImage(Image.open("icons/add_icon.png"))
-        self.add_task_button = Button(self.frame, image=self.add_icon, border=0,
-                                      command=self.add_task, bg=self.LIGHT_COLOR, 
-                                      activebackground=self.LIGHT_COLOR)
+        self.add_task_button = Button(
+            self.frame, 
+            image=self.add_icon, 
+            border=0,
+            command=self.add_task, 
+            bg=self.LIGHT_COLOR, 
+            activebackground=self.LIGHT_COLOR
+        )
         self.refresh_icon = ImageTk.PhotoImage(Image.open("icons/refresh_icon.png"))
-        self.refresh_button = Button(self.frame, image=self.refresh_icon, border=0, 
-                                     command=self.refresh_to_do_list, bg=self.LIGHT_COLOR, 
-                                     activebackground=self.LIGHT_COLOR)
+        self.refresh_button = Button(
+            self.frame, 
+            image=self.refresh_icon, 
+            border=0, 
+            command=self.refresh_to_do_list, 
+            bg=self.LIGHT_COLOR, 
+            activebackground=self.LIGHT_COLOR
+        )
         self.trash_icon = ImageTk.PhotoImage(Image.open("icons/trash_icon.png"))
-        self.trash_button = Button(self.frame, image=self.trash_icon, border=0, 
-                                   command=self.trash_to_do_list, bg=self.LIGHT_COLOR, 
-                                   activebackground=self.LIGHT_COLOR)
-        self.add_task_input = Entry(self.frame, width=20, font=self.ACTIVE_TASK_FONT, 
-                                    justify= CENTER)
+        self.trash_button = Button(
+            self.frame, 
+            image=self.trash_icon, 
+            border=0, 
+            command=self.trash_to_do_list, 
+            bg=self.LIGHT_COLOR, 
+            activebackground=self.LIGHT_COLOR
+            )
+        self.add_task_input = Entry(
+            self.frame, 
+            width=20, 
+            font=self.ACTIVE_TASK_FONT, 
+            justify= CENTER
+        )
 
     def toggle_frame(self): 
         self.open_to_do.place_forget()
-        # Place the to do list frame on the root window and buttons in the frame.
+        # Place the to do list frame on the root window 
+        # and place the buttons in the frame.
         self.frame.place(x=0,y=0)
         self.close_to_do.place(x=250,y=10)
         self.add_task_button.place(x=50,y=430)
@@ -53,7 +84,9 @@ class ToDoList:
         self.trash_button.place(x=200,y=430)
 
         # If there are no tasks saved, retrieve them from the to do list csv.
-        if not self.active_tasks and not self.completed_tasks and not self.queued_tasks:
+        if (not self.active_tasks 
+            and not self.completed_tasks 
+            and not self.queued_tasks):
             self.get_task_list()
         else:
             self.place_current_tasks()
@@ -63,7 +96,8 @@ class ToDoList:
         y = 40
         df = pandas.read_csv('to_do_list.csv')
         for index, row in df.iterrows():
-            # For the first 10 tasks in the csv, create a button and place it on the to do list frame.
+            # For the first 10 tasks in the csv, 
+            # create a button and place it on the to do list frame.
             if index < 10:
                 button = self.create_task_button(row["Task"])
                 button.place(x=10, y=y, anchor='w')
@@ -86,38 +120,47 @@ class ToDoList:
                 y += 40
 
     def create_task_button(self, task):
-        new_button = Button(self.frame,text=task,
-                            font= self.ACTIVE_TASK_FONT,
-                            justify= LEFT,
-                            wraplength=230,
-                            fg=self.DARK_COLOR,
-                            border=0,
-                            bg=self.LIGHT_COLOR,
-                            activeforeground=self.DARK_COLOR,
-                            activebackground=self.LIGHT_COLOR)
-        new_button.config(command=lambda b = new_button, t = task: self.cross_off_task(b,t))
+        new_button = Button(
+            self.frame,text=task,
+                font= self.ACTIVE_TASK_FONT,
+                justify= LEFT,
+                wraplength=230,
+                fg=self.DARK_COLOR,
+                border=0,
+                bg=self.LIGHT_COLOR,
+                activeforeground=self.DARK_COLOR,
+                activebackground=self.LIGHT_COLOR
+            )
+        new_button.config(
+            command=lambda b = new_button, t = task: self.cross_off_task(b,t)
+        )
 
         self.active_tasks[task] = new_button
         return new_button
     
     def cross_off_task(self, button, task):
-        button.config(font=self.FINISHED_TASK_FONT, 
-                      command= lambda b = button, t = task: self.uncross_off_task(b,t))
-        # Move task from active to completed
+        button.config(
+            font=self.FINISHED_TASK_FONT, 
+            command= lambda b = button, t = task: self.uncross_off_task(b,t)
+        )
+        # Move task from active to completed.
         self.completed_tasks[task] = button
         del self.active_tasks[task]
 
     def uncross_off_task(self, button, task):
-        button.config(font=self.ACTIVE_TASK_FONT, 
-                      command= lambda b = button, t = task: self.cross_off_task(b,t))
-        # Move task from completed to active
+        button.config(
+            font=self.ACTIVE_TASK_FONT, 
+            command= lambda b = button, t = task: self.cross_off_task(b,t)
+        )
+        # Move task from completed to active.
         self.active_tasks[task] = button
         del self.completed_tasks[task]
  
     def add_task(self):
     # This method reconfigures the screen to take input to add a new task.
         
-        # Remove trash and reset button, move the add button, and place the entry bar.
+        # Remove trash and reset button, move the add button, 
+        # and place the entry bar.
         self.trash_button.place_forget()
         self.refresh_button.place_forget()
         self.add_task_input.place(x=75,y=435)
@@ -149,16 +192,22 @@ class ToDoList:
         self.add_task_button.config(command=self.add_task)
     
     def refresh_to_do_list(self):
-        result = mb.askquestion('Refresh To Do List', 
-                                'Are you sure you want to refresh?\n\nDoing so will delete all completed tasks.')
+        result = mb.askquestion(
+            'Refresh To Do List', 
+            ('Are you sure you want to refresh?\n\n'
+            'Doing so will delete all completed tasks.')
+        )
         if result == 'yes':
-            # Move the active tasks to the top of the frame
+            # Move the active tasks to the top of the frame.
             self.place_current_tasks()
             self.clear_tasks_from_frame(self.completed_tasks)
             self.completed_tasks = {}
 
     def trash_to_do_list(self):
-        result = mb.askquestion('Trash To Do List', 'Are you sure you want to trash all tasks?')
+        result = mb.askquestion(
+            'Trash To Do List', 
+            'Are you sure you want to trash all tasks?'
+        )
 
         if result == 'yes':
             self.clear_tasks_from_frame(self.active_tasks, self.completed_tasks)
@@ -176,7 +225,7 @@ class ToDoList:
                 dict2[task].place_forget()
 
     def close_task_list(self):
-        # Remove add task input box incase it's open
+        # Remove add task input box incase it's open.
         self.add_task_input.place_forget()
         self.add_task_input.delete(0, END)
         self.add_task_input.unbind('<Return>')
