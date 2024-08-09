@@ -265,7 +265,7 @@ class Timer:
         self.entry.place(relx=0.5,rely=0.55, anchor='center')
         self.entry.focus()
         self.entry.delete(0, END)
-        self.entry.insert(0, "30")
+        self.entry.insert(0, "1")
         self.entry.bind(
             '<Return>', 
             (lambda event: self.save_total_pomos(adding = True))
