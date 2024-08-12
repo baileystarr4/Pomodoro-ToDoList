@@ -157,6 +157,10 @@ class Timer:
     def clicked_default_button(self):
         self.custom_button.place_forget()
         self.default_button.place_forget()
+        self.total_pomos = 5
+        self.work_min = 45
+        self.short_break_min = 15
+        self.long_break_min = 30
         self.first_work_session()
 
     def clicked_custom_button(self):
@@ -175,6 +179,7 @@ class Timer:
         self.entry.delete(0, END)
         self.entry.insert(0, "30")
         self.entry.bind('<Return>', (lambda event: self.save_time_work()))
+        self.save_button.config(command=self.save_time_work)
         self.save_button.place(relx=0.5,rely=0.7, anchor='center')
 
     def clicked_reset_button(self, reset_alert = True):
@@ -197,12 +202,8 @@ class Timer:
         self.skip_button.place_forget()
         self.pomos_label.place_forget()
 
-        # Reset to default settings.
+        # Reset reps and pause / play button
         self.reps = 1
-        self.total_pomos = 5
-        self.work_min = 45
-        self.short_break_min = 15
-        self.long_break_min = 30
         self.pause_play_button.config(
             image=self.pause_icon, 
             command=self.clicked_pause
@@ -270,6 +271,7 @@ class Timer:
             '<Return>', 
             (lambda event: self.save_total_pomos(adding = True))
         )
+        self.save_button.config(command=lambda: self.save_total_pomos(adding=True))
         self.save_button.place(relx=0.5,rely=0.7, anchor='center')
 
     def clicked_finish_button(self):
