@@ -235,25 +235,7 @@ class Timer:
         self.paused = False
         # Stop and restart timer with no alarm.
         self.window.after_cancel(self.timer)
-        self.start_timer(alarm=False)
-
-    def start_next_session(self, session):
-        # Stop alarm, reconfigure the pause/play button to pause, 
-        # and start the count down.
-        self.notifier.stop_sound()
-        self.pause_play_button.config(
-            command=self.clicked_pause, 
-            image=self.pause_icon
-        )
-
-        if session == "work":
-            seconds = self.work_min * 60
-        elif session == "long":
-            seconds = self.long_break_min * 60
-        elif session == "short":
-            seconds = self.short_break_min * 60
-
-        self.count_down(seconds) 
+        self.determine_next_session(alarm=False)
 
     def clicked_add_pomo(self):
         self.add_pomo_button.place_forget()
@@ -336,7 +318,7 @@ class Timer:
                 (lambda event: self.save_total_pomos())
             )
             self.question_label.config(
-                text="How many pomodoros would you like to do?"
+                text="How many pomos would you like to do?"
             )
             self.entry.delete(0, END)
             self.entry.insert(0, "5")
@@ -344,6 +326,7 @@ class Timer:
     def save_total_pomos(self, adding = False):
         if adding == True:
             self.total_pomos = self.try_to_get_input() + self.total_pomos
+            print(self.reps)
         else:
             self.total_pomos = self.try_to_get_input()
 
@@ -357,8 +340,21 @@ class Timer:
             self.first_work_session()        
 
     # ---------------------------- TIMER ------------------------------- # 
-    def start_timer(self, alarm = True):
+    def first_work_session(self):
+        #Configure and place timer screen.
+        self.reset_button.place(relx=0.3,rely=0.7, anchor='center')
+        self.pause_play_button.place(relx=0.5,rely=0.7, anchor='center')
+        self.skip_button.place(relx=0.7,rely=0.7, anchor='center')
+        self.pomos_label.config(text=f"{(self.reps//2)+1}/{self.total_pomos}")
+        self.pomos_label.place(relx=0.5,rely=0.1, anchor='center')
+        self.timer_label.config(text="Work")
+        self.timer_canvas.place(relx=0.5,rely=0.475, anchor='center')
+
+        self.start_next_session("work")
+    
+    def determine_next_session(self, alarm = True):
         self.reps += 1
+        print(self.reps)
 
         # Have you completed all the scheduled pomodoros?
         # Would you like to add another or finish?
@@ -427,6 +423,24 @@ class Timer:
             if alarm:
                 self.notifier.notify("work")    
 
+    def start_next_session(self, session):
+        # Stop alarm, reconfigure the pause/play button to pause, 
+        # and start the count down.
+        self.notifier.stop_sound()
+        self.pause_play_button.config(
+            command=self.clicked_pause, 
+            image=self.pause_icon
+        )
+
+        if session == "work":
+            seconds = self.work_min * 60
+        elif session == "long":
+            seconds = self.long_break_min * 60
+        elif session == "short":
+            seconds = self.short_break_min * 60
+
+        self.count_down(seconds) 
+
     def count_down(self,count):
         count_min = math.floor(count / 60)
         count_sec = count % 60
@@ -449,21 +463,4 @@ class Timer:
                 count -= 1
             self.timer = self.window.after(1000, self.count_down, count) 
         else:
-            self.start_timer()
-
-# ---------------------------- HELPERS  ---------------------------- # 
-    def place_timer_buttons(self):
-        self.reset_button.place(relx=0.3,rely=0.7, anchor='center')
-        self.pause_play_button.place(relx=0.5,rely=0.7, anchor='center')
-        self.skip_button.place(relx=0.7,rely=0.7, anchor='center')
-
-    def first_work_session(self):
-        self.place_timer_buttons()
-
-        #Configure and place timer screen.
-        self.pomos_label.config(text=f"{(self.reps//2)+1}/{self.total_pomos}")
-        self.pomos_label.place(relx=0.5,rely=0.1, anchor='center')
-        self.timer_label.config(text="Work")
-        self.timer_canvas.place(relx=0.5,rely=0.475, anchor='center')
-
-        self.start_next_session("work")
+            self.determine_next_session()
