@@ -326,7 +326,6 @@ class Timer:
     def save_total_pomos(self, adding = False):
         if adding == True:
             self.total_pomos = self.try_to_get_input() + self.total_pomos
-            print(self.reps)
         else:
             self.total_pomos = self.try_to_get_input()
 
@@ -354,7 +353,6 @@ class Timer:
     
     def determine_next_session(self, alarm = True):
         self.reps += 1
-        print(self.reps)
 
         # Have you completed all the scheduled pomodoros?
         # Would you like to add another or finish?
