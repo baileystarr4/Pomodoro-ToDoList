@@ -2,12 +2,14 @@ from tkinter import *
 from tkinter import messagebox as mb
 from PIL import ImageTk,Image
 import pandas
+from collections import deque
 
 class ToDoList:
     def __init__(self, window):
+        # task : button
         self.active_tasks = {}
         self.completed_tasks = {}
-        self.queued_tasks = {}
+        self.queued_tasks = deque()
         self.ACTIVE_TASK_FONT = ("Courier", 12, "bold")
         self.FINISHED_TASK_FONT = ("Courier", 12, "overstrike")
         self.LIGHT_COLOR = "#5C8374"
@@ -104,11 +106,17 @@ class ToDoList:
                 y += 40
             # After the first 10 tasks, queue them to be placed or saved later.
             else:
-                self.queued_tasks[row['Task']] = None
+                self.queued_tasks.append(row['Task'])
  
     def place_current_tasks(self):
-    # This method places all saved active and completed tasks in the frame.
-        
+    # updates active task list and places all saved tasks in the frame.
+
+        avail_space = 10 - (len(self.active_tasks) + len(self.completed_tasks))
+        # move queued tasks to active
+        while avail_space and self.queued_tasks:
+                button = self.create_task_button(self.queued_tasks.popleft())
+                avail_space -= 1
+
         y = 40
         # Start by placing the active tasks.
         for task, button in self.active_tasks.items():
@@ -118,6 +126,7 @@ class ToDoList:
         for task, button in self.completed_tasks.items():
                 button.place(x=10, y=y, anchor='w')
                 y += 40
+
 
     def create_task_button(self, task):
         new_button = Button(
@@ -178,7 +187,7 @@ class ToDoList:
             self.active_tasks[new_task] = self.create_task_button(new_task)
         # If not, queue the task.
         else:
-            self.queued_tasks[new_task] = None
+            self.queued_tasks.append(new_task)
 
         self.place_current_tasks()
 
@@ -198,10 +207,9 @@ class ToDoList:
             'Doing so will delete all completed tasks.')
         )
         if result == 'yes':
-            # Move the active tasks to the top of the frame.
-            self.place_current_tasks()
             self.clear_tasks_from_frame(self.completed_tasks)
-            self.completed_tasks = {}
+            self.completed_tasks.clear()
+            self.place_current_tasks()
 
     def trash_to_do_list(self):
         result = mb.askquestion(
@@ -211,9 +219,9 @@ class ToDoList:
 
         if result == 'yes':
             self.clear_tasks_from_frame(self.active_tasks, self.completed_tasks)
-            self.completed_tasks = {}
-            self.active_tasks = {}
-            self.queued_tasks = {}
+            self.completed_tasks.clear()
+            self.active_tasks.clear()
+            self.queued_tasks.clear()
             self.update_csv()
             
 
@@ -240,7 +248,7 @@ class ToDoList:
         for task in self.active_tasks.keys():
             remaining_tasks['Task'].append(task)
             
-        for task in self.queued_tasks.keys():
+        for task in self.queued_tasks:
             remaining_tasks['Task'].append(task)
 
         df = pandas.DataFrame(remaining_tasks)
