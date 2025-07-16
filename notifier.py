@@ -33,16 +33,16 @@ class Notifier:
         
         if session == "long break":
             self.long_break_toast.show()
-            pygame.mixer.music.load("notifier_sounds/BOTW_Fanfare_SmallItem.wav")
+            pygame.mixer.music.load("sounds/BOTW_Fanfare_SmallItem.wav")
         elif session == "short break":
             self.short_break_toast.show()
-            pygame.mixer.music.load("notifier_sounds/BOTW_Fanfare_SmallItem.wav")
+            pygame.mixer.music.load("sounds/BOTW_Fanfare_SmallItem.wav")
         elif session == "work":
             self.work_toast.show()
-            pygame.mixer.music.load("notifier_sounds/BOTW_Secret.wav")
+            pygame.mixer.music.load("sounds/BOTW_Secret.wav")
         elif session == "end":
             self.end_toast.show()
-            pygame.mixer.music.load("notifier_sounds/BOTW_Fanfare_SpiritOrb.wav")
+            pygame.mixer.music.load("sounds/BOTW_Fanfare_SpiritOrb.wav")
 
         pygame.mixer.music.play()
 
