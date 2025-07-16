@@ -129,16 +129,18 @@ class ToDoList:
 
 
     def create_task_button(self, task):
+        button_text = task if len(task) <= 46 else task[:43] + "..."
         new_button = Button(
-            self.frame,text=task,
-                font= self.ACTIVE_TASK_FONT,
-                justify= LEFT,
-                wraplength=230,
-                fg=self.DARK_COLOR,
-                border=0,
-                bg=self.LIGHT_COLOR,
-                activeforeground=self.DARK_COLOR,
-                activebackground=self.LIGHT_COLOR
+            self.frame,
+            text = button_text,
+            font = self.ACTIVE_TASK_FONT,
+            justify = LEFT,
+            wraplength = 230,
+            fg = self.DARK_COLOR,
+            border = 0,
+            bg = self.LIGHT_COLOR,
+            activeforeground = self.DARK_COLOR,
+            activebackground = self.LIGHT_COLOR
             )
         new_button.config(
             command=lambda b = new_button, t = task: self.cross_off_task(b,t)
