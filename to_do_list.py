@@ -3,6 +3,7 @@ from tkinter import messagebox as mb
 from PIL import ImageTk,Image
 import pandas
 from collections import deque
+from utils import resource_path
 
 class ToDoList:
     def __init__(self, window):
@@ -20,7 +21,7 @@ class ToDoList:
         self.frame = Frame(self.window,width=300,height=500,bg=self.LIGHT_COLOR)
 
         # Initialize and place the to do list button onto the root window.
-        self.list_icon = ImageTk.PhotoImage(Image.open("icons/list_icon.png"))
+        self.list_icon = ImageTk.PhotoImage(Image.open(resource_path("icons/list_icon.png")))
         self.open_to_do = Button(
             self.window, 
             image=self.list_icon, 
@@ -32,7 +33,7 @@ class ToDoList:
         self.open_to_do.place(x=10,y=15)
         
         # Initialize the widgets used when the to do list frame is opened.
-        self.close_icon = ImageTk.PhotoImage(Image.open("icons/close_icon.png"))
+        self.close_icon = ImageTk.PhotoImage(Image.open(resource_path("icons/close_icon.png")))
         self.close_to_do = Button(
             self.frame, 
             image=self.close_icon, 
@@ -41,7 +42,7 @@ class ToDoList:
             bg=self.LIGHT_COLOR, 
             activebackground=self.LIGHT_COLOR
         )
-        self.add_icon = ImageTk.PhotoImage(Image.open("icons/add_icon.png"))
+        self.add_icon = ImageTk.PhotoImage(Image.open(resource_path("icons/add_icon.png")))
         self.add_task_button = Button(
             self.frame, 
             image=self.add_icon, 
@@ -50,7 +51,7 @@ class ToDoList:
             bg=self.LIGHT_COLOR, 
             activebackground=self.LIGHT_COLOR
         )
-        self.refresh_icon = ImageTk.PhotoImage(Image.open("icons/refresh_icon.png"))
+        self.refresh_icon = ImageTk.PhotoImage(Image.open(resource_path("icons/refresh_icon.png")))
         self.refresh_button = Button(
             self.frame, 
             image=self.refresh_icon, 
@@ -59,7 +60,7 @@ class ToDoList:
             bg=self.LIGHT_COLOR, 
             activebackground=self.LIGHT_COLOR
         )
-        self.trash_icon = ImageTk.PhotoImage(Image.open("icons/trash_icon.png"))
+        self.trash_icon = ImageTk.PhotoImage(Image.open(resource_path("icons/trash_icon.png")))
         self.trash_button = Button(
             self.frame, 
             image=self.trash_icon, 
@@ -96,7 +97,7 @@ class ToDoList:
 
     def get_task_list(self):
         y = 40
-        df = pandas.read_csv('to_do_list.csv')
+        df = pandas.read_csv(resource_path('to_do_list.csv'))
         for index, row in df.iterrows():
             # For the first 10 tasks in the csv, 
             # create a button and place it on the to do list frame.
@@ -254,4 +255,4 @@ class ToDoList:
             remaining_tasks['Task'].append(task)
 
         df = pandas.DataFrame(remaining_tasks)
-        df.to_csv('to_do_list.csv', index=False)
+        df.to_csv(resource_path('to_do_list.csv'), index=False)

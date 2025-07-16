@@ -4,6 +4,7 @@ from notifier import *
 import math
 from to_do_list import *
 from PIL import ImageTk,Image
+from utils import resource_path
 
 class Timer:
     def __init__(self):
@@ -24,6 +25,7 @@ class Timer:
         self.window.title("Pomodoro")
         self.window.config(bg=self.DARK_COLOR)
         self.window.geometry('900x500')
+        self.window.iconbitmap(resource_path("icons/app_icon.ico"))
 
         # Initialize and place on screen widgets.
         self.timer_label = Label(
@@ -57,10 +59,10 @@ class Timer:
         self.custom_button.place(relx=0.7,rely=0.6, anchor='center')
 
         #Initialize icons for timer buttons.
-        self.reset_icon = ImageTk.PhotoImage(Image.open("icons/reset_icon.png"))
-        self.skip_icon = ImageTk.PhotoImage(Image.open("icons/skip_icon.png"))
-        self.play_icon = ImageTk.PhotoImage(Image.open("icons/play_icon.png"))
-        self.pause_icon = ImageTk.PhotoImage(Image.open("icons/pause_icon.png"))
+        self.reset_icon = ImageTk.PhotoImage(Image.open(resource_path("icons/reset_icon.png")))
+        self.skip_icon = ImageTk.PhotoImage(Image.open(resource_path("icons/skip_icon.png")))
+        self.play_icon = ImageTk.PhotoImage(Image.open(resource_path("icons/play_icon.png")))
+        self.pause_icon = ImageTk.PhotoImage(Image.open(resource_path("icons/pause_icon.png")))
 
         #Initialize widgets for later use.
         self.question_label = Label(
