@@ -17,7 +17,7 @@ class Timer:
         self.work_min = 45
         self.short_break_min = 15
         self.long_break_min = 30
-        self.paused = False
+        self.remaining_count = 0
 
         # Initialize and configure window.
         self.window = Tk()
@@ -183,6 +183,7 @@ class Timer:
         self.save_button.place(relx=0.5,rely=0.7, anchor='center')
 
     def clicked_reset_button(self, reset_alert = True):
+        # Show "Are you sure" 
         if reset_alert:
             self.clicked_pause()
             result = mb.askquestion(
@@ -208,7 +209,6 @@ class Timer:
             image=self.pause_icon, 
             command=self.clicked_pause
         )
-        self.paused = False
 
         # Reset to the starting screen.
         self.timer_label.config(text="Pomodoro")
@@ -217,22 +217,22 @@ class Timer:
         self.custom_button.place(relx=0.7,rely=0.6, anchor='center')  
 
     def clicked_pause(self):
-        self.paused = True
         self.pause_play_button.config(
             command=self.clicked_play, 
             image=self.play_icon
         )
+        if self.timer:
+            self.window.after_cancel(self.timer)
     
     def clicked_play(self):
-        self.paused = False
         self.pause_play_button.config(
             command=self.clicked_pause, 
             image=self.pause_icon
         )
+        # resume timer
+        self.count_down()
 
     def clicked_skip(self):
-        # Set pause to false so the next session can start properly.
-        self.paused = False
         # Stop and restart timer with no alarm.
         self.window.after_cancel(self.timer)
         self.determine_next_session(alarm=False)
@@ -437,11 +437,12 @@ class Timer:
         elif session == "short":
             seconds = self.short_break_min * 60
 
-        self.count_down(seconds) 
+        self.remaining_count = seconds
+        self.count_down() 
 
-    def count_down(self,count):
-        count_min = math.floor(count / 60)
-        count_sec = count % 60
+    def count_down(self):
+        count_min = math.floor(self.remaining_count / 60)
+        count_sec = self.remaining_count % 60
 
         if count_min < 10:
             count_min=f"0{count_min}"
@@ -454,11 +455,9 @@ class Timer:
             text=f"{count_min}:{count_sec}"
         )
 
-        # If the timer has not ended and is not paused, 
-        # continue counting down.
-        if count:
-            if not self.paused:
-                count -= 1
-            self.timer = self.window.after(1000, self.count_down, count) 
-        else:
+        # If the timer has not ended, continue counting down
+        if self.remaining_count > 0:
+            self.remaining_count -= 1
+            self.timer = self.window.after(1000, self.count_down) 
+        elif self.remaining_count == 0:
             self.determine_next_session()
