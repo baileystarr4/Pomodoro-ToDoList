@@ -3,7 +3,7 @@ from tkinter import messagebox as mb
 from PIL import ImageTk,Image
 import pandas
 from collections import deque
-from utils import resource_path
+from utils import resource_path, get_task_list_path
 
 class ToDoList:
     def __init__(self, window):
@@ -97,7 +97,7 @@ class ToDoList:
 
     def get_task_list(self):
         y = 40
-        df = pandas.read_csv(resource_path('to_do_list.csv'))
+        df = pandas.read_csv(get_task_list_path())
         for index, row in df.iterrows():
             # For the first 10 tasks in the csv, 
             # create a button and place it on the to do list frame.
@@ -255,4 +255,4 @@ class ToDoList:
             remaining_tasks['Task'].append(task)
 
         df = pandas.DataFrame(remaining_tasks)
-        df.to_csv(resource_path('to_do_list.csv'), index=False)
+        df.to_csv(get_task_list_path(), index=False)
