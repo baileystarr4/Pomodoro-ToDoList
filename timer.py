@@ -21,13 +21,13 @@ class Timer:
 
         # Initialize and configure window.
         self.window = Tk()
-        self.window.title("Pomodoro")
+        self.window.title("Pomo + To-Do")
         self.window.config(bg=self.DARK_COLOR)
         self.window.geometry('900x500')
 
         # Initialize and place on screen widgets.
         self.timer_label = Label(
-            text="Pomodoro", 
+            text="Pomo + To-Do", 
             font=(self.FONT_NAME, 50, "bold"), 
             fg=self.LIGHT_COLOR, 
             bg=self.DARK_COLOR
@@ -213,7 +213,7 @@ class Timer:
         )
 
         # Reset to the starting screen.
-        self.timer_label.config(text="Pomodoro")
+        self.timer_label.config(text="Pomo + To-Do")
         self.default_button.place(relx=0.3,rely=0.6, anchor='center')
         self.save_button.config(command=self.save_time_work)
         self.custom_button.place(relx=0.7,rely=0.6, anchor='center')  
