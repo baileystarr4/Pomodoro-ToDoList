@@ -15,8 +15,8 @@ class Timer:
         self.timer = None
         self.reps = 1
         self.total_pomos = 5
-        self.work_min = 45
-        self.short_break_min = 15
+        self.work_min = 25
+        self.short_break_min = 5
         self.long_break_min = 30
         self.remaining_count = 0
 
@@ -159,10 +159,6 @@ class Timer:
     def clicked_default_button(self):
         self.custom_button.place_forget()
         self.default_button.place_forget()
-        self.total_pomos = 5
-        self.work_min = 45
-        self.short_break_min = 15
-        self.long_break_min = 30
         self.first_work_session()
 
     def clicked_custom_button(self):
@@ -205,8 +201,14 @@ class Timer:
         self.skip_button.place_forget()
         self.pomos_label.place_forget()
 
-        # Reset reps and pause / play button
+        # Restore defaults and reset pause / play button
         self.reps = 1
+        self.total_pomos = 5
+        self.work_min = 25
+        self.short_break_min = 5
+        self.long_break_min = 30
+        self.remaining_count = 0
+
         self.pause_play_button.config(
             image=self.pause_icon, 
             command=self.clicked_pause
@@ -379,7 +381,7 @@ class Timer:
             self.notifier.notify("end")
 
         # Is it time for a long break?
-        elif self.reps % 6 == 0:
+        elif self.reps % 8 == 0:
             self.timer_canvas.itemconfig(
                 self.timer_text, 
                 text=f"{self.long_break_min}:00"
