@@ -19,6 +19,7 @@ class Timer:
         self.short_break_min = 5
         self.long_break_min = 30
         self.remaining_count = 0
+        self.is_muted = False
 
         # Initialize and configure window.
         self.window = Tk()
@@ -57,12 +58,23 @@ class Timer:
             width=8
         )
         self.custom_button.place(relx=0.7,rely=0.6, anchor='center')
+        self.mute_icon = ImageTk.PhotoImage(Image.open(resource_path("icons/mute_icon.png")))
+        self.mute_button = Button(
+            self.window, 
+            image=self.mute_icon, 
+            command=self.clicked_mute_button, 
+            border=0, 
+            bg=self.DARK_COLOR, 
+            activebackground=self.DARK_COLOR
+        )
+        self.mute_button.place(x=840, y=15)
 
         #Initialize icons for timer buttons.
         self.reset_icon = ImageTk.PhotoImage(Image.open(resource_path("icons/reset_icon.png")))
         self.skip_icon = ImageTk.PhotoImage(Image.open(resource_path("icons/skip_icon.png")))
         self.play_icon = ImageTk.PhotoImage(Image.open(resource_path("icons/play_icon.png")))
         self.pause_icon = ImageTk.PhotoImage(Image.open(resource_path("icons/pause_icon.png")))
+        self.unmute_icon = ImageTk.PhotoImage(Image.open(resource_path("icons/unmute_icon.png")))
 
         #Initialize widgets for later use.
         self.question_label = Label(
@@ -265,6 +277,18 @@ class Timer:
         self.add_pomo_button.place_forget()
         self.finish_session_button.place_forget()
         self.clicked_reset_button(reset_alert=False)
+
+    def clicked_mute_button(self):
+        self.notifier.clicked_mute()
+
+        if self.is_muted == False:
+            self.is_muted = True
+            self.mute_button.config(image=self.unmute_icon)
+            self.mute_button.image = self.unmute_icon
+        else:
+            self.is_muted = False
+            self.mute_button.config(image=self.mute_icon)
+            self.mute_button.image = self.mute_icon
 
     # ---------------------- SAVE USER INPUT ---------------------- # 
     def try_to_get_input(self):
