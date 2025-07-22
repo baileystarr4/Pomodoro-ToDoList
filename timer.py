@@ -354,6 +354,7 @@ class Timer:
     def save_total_pomos(self, adding = False):
         if adding == True:
             self.total_pomos = self.try_to_get_input() + self.total_pomos
+            self.reps += 1
         else:
             self.total_pomos = self.try_to_get_input()
 
