@@ -22,12 +22,13 @@ This Windows desktop app combines a customizable Pomodoro timer with a built-in 
 ---
 
 ## Tech Stack
-[![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python&logoColor=white)](https://www.python.org/)
-[![Tkinter](https://img.shields.io/badge/Tkinter-GUI-brightgreen)](https://docs.python.org/3/library/tkinter.html)
-[![Pandas](https://img.shields.io/badge/Pandas-data%20analysis-blue?logo=pandas&logoColor=white)](https://pandas.pydata.org/)
-[![Pillow](https://img.shields.io/badge/Pillow-imaging-yellowgreen)](https://pypi.org/project/pillow/10.2.0/)
-[![Pygame](https://img.shields.io/badge/Pygame-multimedia-blueviolet?logo=pygame&logoColor=white)](https://www.pygame.org/news)
+[![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python&logoColor=white)](https://www.python.org/)  
+[![Tkinter](https://img.shields.io/badge/Tkinter-GUI-brightgreen)](https://docs.python.org/3/library/tkinter.html)  
+[![Pandas](https://img.shields.io/badge/Pandas-data%20analysis-blue?logo=pandas&logoColor=white)](https://pandas.pydata.org/)  
+[![Pillow](https://img.shields.io/badge/Pillow-imaging-yellowgreen)](https://pypi.org/project/pillow/10.2.0/)  
+[![Pygame](https://img.shields.io/badge/Pygame-multimedia-blueviolet?logo=pygame&logoColor=white)](https://www.pygame.org/news)  
 [![Winotify](https://img.shields.io/badge/Winotify-windows%20notifications-orange)](https://pypi.org/project/winotify/)
+
 
 ---
 
@@ -59,6 +60,16 @@ Then follow the tool’s prompts to generate the standalone `.exe`.
 If you find bugs or have suggestions, please open an issue here:
 
 **[Pomo + To Do Issues](https://github.com/baileystarr4/Pomodoro-ToDoList/issues)**
+
+---
+
+## About This Project
+This project combines **productivity tools** with **Python GUI development**. It demonstrates:
+- Building a user-friendly desktop application with **Tkinter** and **Pygame** 
+- Managing and storing task data using **Pandas**  
+- Integrating notifications on Windows with **Winotify**  
+- Packaging a Python app as a **standalone .exe** for easy distribution  
+- Applying **intermediate Python skills**, including **object-oriented programming (OOP)**
 
 ---
 
