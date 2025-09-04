@@ -24,7 +24,7 @@ This Windows desktop app combines a customizable Pomodoro timer with a built-in 
 ## Tech Stack
 [![Python](https://img.shields.io/badge/Python-3.11.9-blue?logo=python&logoColor=white)](https://www.python.org/)   
 [![Tkinter](https://img.shields.io/badge/Tkinter-GUI-brightgreen)](https://docs.python.org/3/library/tkinter.html)  
-[![Pandas](https://img.shields.io/badge/Pandas-data%20handling-blue?logo=pandas&logoColor=white)](https://pandas.pydata.org/)
+[![Pandas](https://img.shields.io/badge/Pandas-data%20handling-blue?logo=pandas&logoColor=white)](https://pandas.pydata.org/)  
 [![Pillow](https://img.shields.io/badge/Pillow-imaging-yellowgreen)](https://pypi.org/project/pillow/10.2.0/)  
 [![Pygame](https://img.shields.io/badge/Pygame-multimedia-blueviolet?logo=pygame&logoColor=white)](https://www.pygame.org/news)  
 [![Winotify](https://img.shields.io/badge/Winotify-windows%20notifications-orange)](https://pypi.org/project/winotify/)
